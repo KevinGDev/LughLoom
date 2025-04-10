@@ -1,0 +1,17 @@
+/* You can add global styles to this file, and also import other style files */
+@import "variables";
+
+body {
+  font-family: $garamond;
+  background-image: url("../public/assets/background-dark.png");
+  background-position: 60% 70%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: $dark-green;
+  @media (max-width: 799px) {
+    background-size: cover; // ou toute autre valeur que vous préférez comme 'contain', '100%', etc.
+  }
+}
+
+
+

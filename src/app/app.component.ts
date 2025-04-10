@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {Component} from '@angular/core';
+import {HomeComponent} from '../home/home.component';
+
 
 @Component({
-  selector: 'app-root',
-  imports: [RouterOutlet],
+  selector: 'app-component',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  standalone: true,
+  styleUrl: './app.component.scss',
+  imports: [HomeComponent,]
 })
 export class AppComponent {
-  title = 'LughLoom';
 }
