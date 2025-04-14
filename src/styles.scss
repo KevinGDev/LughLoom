@@ -4,14 +4,32 @@
 body {
   font-family: $garamond;
   background-image: url("../public/assets/background-dark.png");
-  background-position: 60% 70%;
   background-size: cover;
   background-repeat: no-repeat;
   background-color: $dark-green;
+  background-position: top;
+  transition: background-position 8s ease-in-out; /* Ajoutez la transition ici */
+
   @media (max-width: 799px) {
-    background-size: cover; // ou toute autre valeur que vous préférez comme 'contain', '100%', etc.
+    background-size: 400%; // ou toute autre valeur que vous préférez
   }
 }
+
+body.scrolled {
+  @media (max-width: 799px) {
+    background-position: 15% 65%;
+  }
+  @media (min-width: 800px) and (max-width: 999px) {
+    background-position: 15% 50%;
+  }
+  @media (min-width: 1000px) and (max-width: 1999px) {
+    background-position: 0 60%;
+  }
+  @media (min-width: 1200px) {
+    background-position: 0 75%;
+  }
+}
+
 
 
 

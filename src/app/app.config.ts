@@ -19,7 +19,7 @@ export const appConfig: ApplicationConfig = {
           useFactory: (createTranslateLoader),
           deps: [HttpClient]
         },
-        defaultLanguage: 'en',
+        defaultLanguage: 'fr',
       })
     ]),
     provideRouter(routes),

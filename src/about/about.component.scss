@@ -1,0 +1,23 @@
+@import "variables";
+
+.about-text {
+  position: absolute;
+  color: $golden;
+  font-weight: bold;
+  font-size: $small-font-size;
+  letter-spacing: 2px;
+  margin-left: 10vw;
+  margin-right: 10vw;
+  text-align: justify;
+  line-height: 15px;
+  white-space: break-spaces;
+}
+
+@keyframes blink-caret {
+  from, to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: $golden;
+  }
+}

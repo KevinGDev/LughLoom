@@ -1,0 +1,29 @@
+<div class="chat-screen">
+  <h1>{{ "gameMaster" | translate }}</h1>
+
+  <div class="chat-main">
+    @if (conversation.length === 0) {
+      <div class="chat-content">
+        {{ "chatTextboxPlaceHolder" | translate }}
+      </div>
+    } @else {
+      <div class="chat-content">
+        @for (message of conversation; track message) {
+          <div class="{{message.role}}">
+            {{ message.content }}
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="chat-textbox">
+    <textarea [(ngModel)]="answer" (keydown)="handleKeyDown($event)"
+              [disabled]="isLoading" [ngClass]="isLoading?'disabled':'enabled'"></textarea>
+    <button (click)="sendAnswer()" [disabled]="isLoading" [ngClass]="isLoading?'disabled':'enabled'">
+      <img src="/assets/send-icon.png" alt="Send message">
+    </button>
+  </div>
+
+  <button (click)="summarizeAndDownload()">{{ 'getTale'|translate }}</button>
+</div>
