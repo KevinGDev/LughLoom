@@ -1,6 +1,5 @@
 <div class="chat-screen">
   <h1>{{ "gameMaster" | translate }}</h1>
-
   <div class="chat-main">
     @if (conversation.length === 0) {
       <div class="chat-content">
@@ -25,5 +24,11 @@
     </button>
   </div>
 
-  <button (click)="summarizeAndDownload()">{{ 'getTale'|translate }}</button>
+  <button class="download-tale-button" (click)="summarizeAndDownload()">
+    @if (!downloading) {
+      {{ 'getTale'|translate }}
+    } @else {
+      <div id="loading"></div>
+    }
+  </button>
 </div>

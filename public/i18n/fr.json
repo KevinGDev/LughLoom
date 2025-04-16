@@ -10,5 +10,6 @@
   "gameMaster": "Maître du jeu",
   "chatTextboxPlaceHolder": "Lùgh se tient devant vous, irradiant une lumière dorée. Il vous sourit et la lumière finit par vous éblouir... Était-ce un rêve ?",
   "sendText": "Envoyer",
-  "getTale": "Récupérer le récit"
+  "getTale": "Récupérer le récit",
+  "player": "Joueur"
 }

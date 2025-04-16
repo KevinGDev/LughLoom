@@ -10,5 +10,6 @@
   "gameMaster": "Game Master",
   "chatTextboxPlaceHolder": "Lugh stands before you, radiating golden light. He smiles at you, and the light eventually blinds you... Was it a dream?",
   "sendText": "Send",
-  "getTale": "Download tale"
+  "getTale": "Download tale",
+  "player": "Player"
 }

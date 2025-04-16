@@ -90,12 +90,45 @@
     }
   }
 
+  .download-tale-button {
+    height: 5vh;
+    width: 10vw;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+  }
 
 }
+
 .disabled {
   opacity: 0.1;
 }
 
 .enabled {
   opacity: 1;
+}
+
+#loading {
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+  border: 3px solid rgba(255, 255, 255, .3);
+  border-radius: 50%;
+  border-top-color: $dark-green;
+  animation: spin 3s linear infinite;
+  -webkit-animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
 }
