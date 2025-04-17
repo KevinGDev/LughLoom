@@ -1,0 +1,117 @@
+@import "variables";
+
+.character-creation-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: $golden;
+  animation: fadeIn 5s;
+
+  form {
+    height: 60vh;
+    width: 100vw;
+    margin-top: 10vh;
+
+    .character-form-group {
+      display: flex;
+      justify-content: center;
+
+      input {
+        all: unset;
+        font-size: $medium-font-size;
+        font-weight: bold;
+        opacity: 0.8;
+        color: $golden;
+        background-color: transparent;
+        width: 100%;
+      }
+
+      input:-webkit-autofill {
+        box-shadow: none;
+        -webkit-text-fill-color: $golden;
+        transition: background-color 9999s ease-in-out 0s;
+      }
+
+      .background-cards-container {
+        display: flex;
+        height: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        overflow: scroll;
+        overflow-y: hidden;
+        scrollbar-width: thin;
+        margin: 0 5vw;
+
+
+        .background-card {
+          color: $ivory-bone;
+          flex: 0 0 20vw;
+          font-weight: bold;
+          background-image: url("/assets/card-background.png");
+          background-size: cover;
+          background-repeat: no-repeat;
+          box-shadow: inset 9px -6px 50px 23px #000000;
+          margin: 5vh 2vw;
+          border-radius: 30px;
+          opacity: 0.8;
+          padding: 2vh 1vw;
+transform: scale(1);
+          transition-duration: 0.3s;
+          &:hover {
+            transform: scale(1.1);
+            transition-duration: 0.8s;
+          }
+
+          .background-card-header {
+            font-size: $medium-font-size;
+            margin-bottom: 10vh;
+          }
+
+          .background-card-body {
+            font-size: $x-small-font-size;
+          }
+
+          .background-icon {
+            margin-top: 10vh;
+            text-align: center;
+
+            img {
+              max-width: 150px;
+              max-height: 150px;
+            }
+
+          }
+        }
+      }
+
+
+    }
+
+    button {
+      margin-top: 3vh;
+      background-color: $dark-green;
+      color: $golden;
+      aspect-ratio: 2;
+      opacity: 0.9;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+
+      &.hidden-button {
+        visibility: hidden;
+        pointer-events: none;
+        opacity: 0;
+      }
+    }
+  }
+
+
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.90;
+  }
+}

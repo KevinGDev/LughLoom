@@ -1,0 +1,39 @@
+@if (characterCreated) {
+  <app-chat [character]="character"></app-chat>
+} @else {
+  <div class="character-creation-screen">
+    <form id="character-form">
+      <div class="character-form-group">
+        @if (currentAttribute === "name") {
+          <input type="text" id="dynamic-input" [(ngModel)]="currentAttributeValue"
+                 [ngModelOptions]="{standalone: true}" placeholder="Enter your character's {{currentAttribute}}">
+        } @else if (currentAttribute === "background") {
+
+          <div class="background-cards-container">
+            @for (background of backgrounds; track background.key) {
+              <div (keydown)="selectBackground(background)" (click)="selectBackground(background)"
+                   class="background-card">
+                <div class="background-card-header">⚔️ {{ background.label }}</div>
+                <div class="background-card-body">
+                  {{ background.description }}
+                </div>
+                <div class="background-icon">
+                  <img src="{{background.icon}}" alt="Icon emblem defining the background">
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+      <button
+        type="button"
+        [disabled]="!currentAttributeValue"
+        [ngClass]="{ 'hidden-button': !currentAttributeValue }"
+        (click)="setCharacterAttribute(currentAttributeValue)">
+        Next
+      </button>
+
+
+    </form>
+  </div>
+}

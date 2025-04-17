@@ -1,11 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {TranslatePipe} from "@ngx-translate/core";
 import {FormsModule} from "@angular/forms";
 import {NgClass} from '@angular/common';
-import {OllamaService} from '../services/ollama-api.service';
-import {Prompts} from '../utils/Prompts';
-import {RoleEnum} from '../utils/RoleEnum';
-import {ErrorMessages} from '../utils/ErrorMessages';
+import {OllamaService} from '../../services/ollama-api.service';
+import {Prompts} from '../../utils/Prompts';
+import {RoleEnum} from '../../utils/RoleEnum';
+import {ErrorMessages} from '../../utils/ErrorMessages';
+import {SimpleCharacterInterface} from '../../interfaces/simpleCharacterInterface';
 
 interface Message {
   role: string;
@@ -20,12 +21,14 @@ interface Message {
   styleUrl: './chat.component.scss'
 })
 export class ChatComponent implements OnInit {
+
   constructor(
     private readonly ollamaService: OllamaService,
   ) {
   }
 
-  rules: string = Prompts.darkFantasyMaster;
+  @Input() character: SimpleCharacterInterface | null = null;
+  rules: string = "";
   answer: string = '';
   isLoading: boolean = false;
 
@@ -48,6 +51,7 @@ export class ChatComponent implements OnInit {
    * @throws Error if there's an issue while processing the stream.
    */
   async startStory() {
+    this.rules = Prompts.darkFantasyMaster(this.character)
     try {
       await this.ollamaService.generateChatStream(this.rules, (message: Message) => {
         this.pushOrUpdateAssistantMessage(message);
