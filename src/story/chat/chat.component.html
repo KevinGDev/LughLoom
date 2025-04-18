@@ -6,10 +6,10 @@
         {{ "chatTextboxPlaceHolder" | translate }}
       </div>
     } @else {
-      <div class="chat-content">
+      <div class="chat-content markdown-container">
         @for (message of conversation; track message) {
           <div class="{{message.role}}">
-            {{ message.content }}
+            <markdown [data]="message.content"></markdown> <!-- ✅ fonctionne -->
           </div>
         }
       </div>

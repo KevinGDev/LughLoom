@@ -3,13 +3,58 @@
   "navAdventures": "Aventures",
   "navStories": "Récits",
   "navProfile": "Profil",
-  "joinQuestText": "Rejoignez un quête où le maitre du donjon est une intelligence artificielle",
+  "joinQuestText": "Rejoignez une quête où le maître du donjon est une intelligence artificielle",
   "startAdventureButton": "Démarrer l'aventure",
-  "about": "A propos",
+  "about": "À propos",
   "aboutText": "LughLoom est une table de jeu de rôles en ligne, où le maître du jeu est une intelligence artificielle capable de créer des aventures dynamiques, profondes et entièrement adaptées à vos choix. Ici, pas de scénario figé, pas de narration linéaire : chaque histoire est tissée en temps réel, guidée par vos actions, vos dialogues, vos décisions.\n\nLe nom LughLoom est né de cette idée :\n\nLugh est un dieu majeur de la mythologie celtique, maître des arts, des récits, des serments et de la lumière. Il incarne la sagesse, la créativité, la maîtrise.\n\nLoom, en anglais, désigne un métier à tisser — un outil ancestral de création — mais évoque aussi, plus symboliquement, la trame du destin, le tissage des récits.\n\nLughLoom, c’est donc \"le métier à tisser de Lugh\" : un espace où les histoires se forment fil à fil, sous l’impulsion d’une intelligence inspirée des anciens dieux et des bardes conteurs. Une intelligence artificielle qui crée avec vous.\n\nQue vous jouiez seul ou en groupe, dans un monde médiéval, post-apocalyptique ou totalement fantastique, l’IA agit comme un maître du jeu vivant : elle incarne les personnages, décrit les lieux, adapte les événements, et vous embarque dans une aventure inédite à chaque session.\n\nVous n’avez besoin de rien, si ce n’est de votre imagination. LughLoom tisse, vous explorez.\nEt ensemble, vous écrivez une légende.",
   "gameMaster": "Maître du jeu",
   "chatTextboxPlaceHolder": "Lùgh se tient devant vous, irradiant une lumière dorée. Il vous sourit et la lumière finit par vous éblouir... Était-ce un rêve ?",
   "sendText": "Envoyer",
   "getTale": "Récupérer le récit",
-  "player": "Joueur"
+  "player": "Joueur",
+  "enterAttribute": "Quel est votre {{attribute}} ?",
+  "icon-alt": "Une icône représentant le passé du personnage",
+  "name": "nom",
+  "backgrounds": {
+    "streetChild": {
+      "label": "Enfant des rues",
+      "description": "Vous avez grandi dans la crasse et les ombres, apprenant à mentir, voler et survivre là où d'autres périssaient."
+    },
+    "fallenAcolyte": {
+      "label": "Acolyte déchu",
+      "description": "Autrefois dévoué à un ordre sacré, vous avez fui en découvrant la corruption en son cœur."
+    },
+    "brokenMercenary": {
+      "label": "Mercenaire brisé",
+      "description": "Aguerri et marqué par la guerre, vous connaissez le prix de la loyauté et de la trahison."
+    },
+    "exiledNoble": {
+      "label": "Noble exilé",
+      "description": "Privé de votre titre et banni de votre lignée, vous marchez désormais parmi les oubliés."
+    },
+    "escapedPrisoner": {
+      "label": "Prisonnier évadé",
+      "description": "Des chaînes vous ont retenu autrefois, mais votre volonté a triomphé. La liberté a eu un prix terrible."
+    },
+    "troubledProphet": {
+      "label": "Prophète tourmenté",
+      "description": "Des visions hantent vos rêves — murmures divins ou folie naissante ?"
+    },
+    "relicHunter": {
+      "label": "Chasseur de reliques",
+      "description": "Vous poursuivez des choses anciennes qu’il aurait mieux valu laisser enfouies."
+    },
+    "massacreSurvivor": {
+      "label": "Survivant du massacre",
+      "description": "Votre village a brûlé, vos proches sont tombés. Vous avez survécu, mais quelque chose vous a suivi."
+    },
+    "demonHost": {
+      "label": "Hôte du démon",
+      "description": "Une présence obscure sommeille en vous, vous offrant du pouvoir… et attendant que vous baissiez votre garde."
+    },
+    "fallenPaladin": {
+      "label": "Paladin déchu",
+      "description": "Autrefois symbole de vertu, votre serment est rompu et vos dieux vous ont abandonné."
+    }
+  }
 }

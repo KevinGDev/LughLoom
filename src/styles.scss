@@ -30,6 +30,28 @@ body.scrolled {
   }
 }
 
+/* Scrollbar globale - WebKit (Chrome, Safari, Edge) */
+*::-webkit-scrollbar {
+  width: 6px;         /* scroll verticale */
+  height: 6px;        /* scroll horizontale */
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: $golden;
+  border-radius: 10px;
+}
+
+/* Scrollbar globale - Firefox */
+* {
+  scrollbar-width: thin;               /* mince */
+  scrollbar-color: $golden transparent; /* curseur jaune, fond transparent */
+}
+
+
 
 
 

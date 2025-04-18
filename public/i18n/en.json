@@ -6,10 +6,55 @@
   "joinQuestText": "Join a quest where the dungeon master is an artificial intelligence",
   "startAdventureButton": "Start adventure",
   "about": "About",
-  "aboutText": "LughLoom is a next-generation tabletop roleplaying platform where the game master is an artificial intelligence — capable of weaving deep, dynamic adventures entirely shaped by your choices. No pre-written plots, no rigid structure: every story is spun in real time, responding to your actions, ideas, and imagination.\n\nThe name LughLoom carries the spirit of this vision:\n\nLugh is a major deity from Celtic mythology, known as the god of light, art, oaths, and storytelling. A master of many crafts, Lugh represents wisdom, creativity, and versatility.\n\nA loom is an ancient tool used to weave fabric — but metaphorically, it symbolizes the weaving of fate, the crafting of stories, one thread at a time.\n\nSo, LughLoom means “Lugh’s loom” — a sacred, digital space where tales are woven with you at their center, guided by a storyteller born from myth and machine.\n\nWhether you play solo or with friends, in a medieval world, post-apocalyptic wasteland, or surreal dreamscape, the AI acts as a living game master: it brings characters to life, describes your surroundings, reacts to your choices, and builds the story around you.\n\nThere are no rules to memorize, no prep time — just your curiosity.\nLughLoom weaves. You explore.\nTogether, you write a legend.",
+  "aboutText": "LughLoom is an online tabletop roleplaying experience, where the game master is an artificial intelligence capable of creating deep, dynamic adventures entirely shaped by your choices. No scripted plots, no linear narration — every story is woven in real time, shaped by your actions, your words, your decisions.\n\nThe name LughLoom comes from this idea:\n\nLugh is a major god in Celtic mythology, master of arts, storytelling, oaths, and light. He represents wisdom, creativity, and skill.\n\nA loom is an ancient tool used to weave — both fabric and fate. Symbolically, it represents the threads of destiny, the weaving of stories.\n\nLughLoom is “Lugh’s loom”: a space where stories are woven thread by thread, guided by an intelligence inspired by ancient gods and bardic tales.\n\nWhether you play solo or with others, in a medieval realm, post-apocalyptic world, or surreal dreamscape, the AI acts as a living game master — embodying characters, describing scenes, adapting events, and pulling you into a new tale every session.\n\nYou need nothing but your imagination. LughLoom weaves. You explore.\nTogether, you write a legend.",
   "gameMaster": "Game Master",
-  "chatTextboxPlaceHolder": "Lugh stands before you, radiating golden light. He smiles at you, and the light eventually blinds you... Was it a dream?",
+  "chatTextboxPlaceHolder": "Lùgh stands before you, radiating golden light. He smiles at you, and the light eventually blinds you... Was it a dream?",
   "sendText": "Send",
   "getTale": "Download tale",
-  "player": "Player"
+  "player": "Player",
+  "enterAttribute": "What is your {{attribute}}?",
+  "icon-alt": "An icon representing the character's background",
+  "name": "name",
+  "backgrounds": {
+    "streetChild": {
+      "label": "Street Child",
+      "description": "You grew up in filth and shadows, learning to lie, steal, and survive where others perished."
+    },
+    "fallenAcolyte": {
+      "label": "Fallen Acolyte",
+      "description": "Once devoted to a sacred order, you fled when you uncovered the corruption at its heart."
+    },
+    "brokenMercenary": {
+      "label": "Broken Mercenary",
+      "description": "Battle-hardened and scarred, you have seen the cost of loyalty and the price of betrayal."
+    },
+    "exiledNoble": {
+      "label": "Exiled Noble",
+      "description": "Stripped of your title and cast from your lineage, you now walk among the forgotten."
+    },
+    "escapedPrisoner": {
+      "label": "Escaped Prisoner",
+      "description": "Chains once bound you, but your will proved stronger. Freedom came at a terrible price."
+    },
+    "troubledProphet": {
+      "label": "Troubled Prophet",
+      "description": "Visions haunt your dreams — are they divine whispers or the onset of madness?"
+    },
+    "relicHunter": {
+      "label": "Relic Hunter",
+      "description": "You seek ancient things best left buried, driven by obsession or debt—or both."
+    },
+    "massacreSurvivor": {
+      "label": "Massacre Survivor",
+      "description": "Your village burned, your kin fell. You alone walked away, but something followed."
+    },
+    "demonHost": {
+      "label": "Demon Host",
+      "description": "A dark presence stirs inside you, offering power... and waiting for your guard to slip."
+    },
+    "fallenPaladin": {
+      "label": "Fallen Paladin",
+      "description": "Once a beacon of virtue, your oath is broken and your gods have turned their backs."
+    }
+  }
 }

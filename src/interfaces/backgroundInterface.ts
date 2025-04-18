@@ -1,6 +1,6 @@
-interface Background {
+export interface BackgroundInterface {
   key: string,
-  label: string,
-  description: string,
+  labelKey: string,
+  descriptionKey: string,
   icon: string
 }

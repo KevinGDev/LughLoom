@@ -6,6 +6,7 @@ import {ChatComponent} from './chat/chat.component';
 import {SimpleBackgroundInterface} from '../interfaces/simpleBackgroundInterface';
 import {BackgroundInterface} from '../interfaces/backgroundInterface';
 import {SimpleCharacterInterface} from '../interfaces/simpleCharacterInterface';
+import {TranslatePipe} from '@ngx-translate/core';
 
 
 @Component({
@@ -13,7 +14,8 @@ import {SimpleCharacterInterface} from '../interfaces/simpleCharacterInterface';
   imports: [
     FormsModule,
     NgClass,
-    ChatComponent
+    ChatComponent,
+    TranslatePipe
   ],
   templateUrl: './story.component.html',
   standalone: true,
@@ -55,8 +57,8 @@ export class StoryComponent {
   }
 
   selectBackground(background: BackgroundInterface): void {
-    this.simpleBackground.label = background.label;
-    this.simpleBackground.description = background.description;
+    this.simpleBackground.label = background.labelKey;
+    this.simpleBackground.description = background.descriptionKey;
     this.character.background = this.simpleBackground;
     this.nextAttribute();
   }

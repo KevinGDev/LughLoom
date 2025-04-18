@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {FormsModule} from "@angular/forms";
 import {NgClass} from '@angular/common';
 import {OllamaService} from '../../services/ollama-api.service';
@@ -7,6 +7,9 @@ import {Prompts} from '../../utils/Prompts';
 import {RoleEnum} from '../../utils/RoleEnum';
 import {ErrorMessages} from '../../utils/ErrorMessages';
 import {SimpleCharacterInterface} from '../../interfaces/simpleCharacterInterface';
+import {MarkdownComponent} from 'ngx-markdown';
+import {Language} from '../../utils/LanguagesEnum';
+
 
 interface Message {
   role: string;
@@ -16,7 +19,7 @@ interface Message {
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [TranslatePipe, FormsModule, NgClass],
+  imports: [TranslatePipe, FormsModule, NgClass, MarkdownComponent],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })
@@ -24,6 +27,7 @@ export class ChatComponent implements OnInit {
 
   constructor(
     private readonly ollamaService: OllamaService,
+    private readonly translateService: TranslateService
   ) {
   }
 
@@ -31,9 +35,9 @@ export class ChatComponent implements OnInit {
   rules: string = "";
   answer: string = '';
   isLoading: boolean = false;
-
   conversation: Message[] = [];
   downloading: boolean = false;
+  language: string = '';
 
   /**
    * Initializes the component, loading the story at the start.
@@ -41,6 +45,12 @@ export class ChatComponent implements OnInit {
    */
   async ngOnInit(): Promise<void> {
     this.isLoading = true;
+    if (this.translateService.currentLang !== undefined) {
+      this.language = this.translateService.currentLang
+    } else {
+      this.language = this.translateService.defaultLang
+    }
+
     await this.startStory();
   }
 
@@ -50,8 +60,8 @@ export class ChatComponent implements OnInit {
    *
    * @throws Error if there's an issue while processing the stream.
    */
-  async startStory() {
-    this.rules = Prompts.darkFantasyMaster(this.character)
+  async startStory(): Promise<void> {
+    this.rules = Prompts.darkFantasyMaster(this.character, this.getLanguageFullValue(this.language));
     try {
       await this.ollamaService.generateChatStream(this.rules, (message: Message) => {
         this.pushOrUpdateAssistantMessage(message);
@@ -64,13 +74,17 @@ export class ChatComponent implements OnInit {
     }
   }
 
+  getLanguageFullValue(language: string): string {
+    return Language[language as keyof typeof Language];
+  }
+
   /**
    * Handles the key down event for the Enter key. When Enter is pressed,
    * it sends the user's input as a message to the server.
    *
    * @param event The keyboard event triggered when the user presses a key.
    */
-  async handleKeyDown(event: KeyboardEvent) {
+  async handleKeyDown(event: KeyboardEvent): Promise<void> {
     let enter = 'Enter';
     if (event.key === enter) {
       event.preventDefault();
@@ -110,7 +124,7 @@ export class ChatComponent implements OnInit {
    *
    * @param message The message from the assistant to be added or updated.
    */
-  private pushOrUpdateAssistantMessage(message: Message) {
+  private pushOrUpdateAssistantMessage(message: Message): void {
     if (
       this.conversation.length > 0 &&
       this.conversation[this.conversation.length - 1].role === message.role &&

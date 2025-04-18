@@ -24,7 +24,6 @@
         opacity: 0.8;
         color: $golden;
         background-color: transparent;
-        width: 100%;
       }
 
       input:-webkit-autofill {
@@ -56,8 +55,13 @@
           border-radius: 30px;
           opacity: 0.8;
           padding: 2vh 1vw;
-transform: scale(1);
+          transform: scale(1);
           transition-duration: 0.3s;
+          @media (max-width: 799px) {
+            flex: 0 0 60vw;
+            padding: 2vh 5vw;
+          }
+
           &:hover {
             transform: scale(1.1);
             transition-duration: 0.8s;
@@ -75,11 +79,19 @@ transform: scale(1);
           .background-icon {
             margin-top: 10vh;
             text-align: center;
+            @media (max-width: 799px) {
+              margin-top: 5vh;
+            }
 
             img {
               max-width: 150px;
               max-height: 150px;
+              @media (max-width: 799px) {
+                max-width: 100px;
+                max-height: 100px;
+              }
             }
+
 
           }
         }
