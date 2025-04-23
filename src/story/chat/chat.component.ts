@@ -1,20 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {FormsModule} from "@angular/forms";
 import {NgClass} from '@angular/common';
 import {OllamaService} from '../../services/ollama-api.service';
 import {Prompts} from '../../utils/Prompts';
 import {RoleEnum} from '../../utils/RoleEnum';
-import {ErrorMessages} from '../../utils/ErrorMessages';
 import {SimpleCharacterInterface} from '../../interfaces/simpleCharacterInterface';
 import {MarkdownComponent} from 'ngx-markdown';
 import {Language} from '../../utils/LanguagesEnum';
+import {ChatMessage} from '../../interfaces/chatMessageInterface';
+import {ErrorMessages} from '../../utils/ErrorMessages';
 
-
-interface Message {
-  role: string;
-  content: string;
-}
 
 @Component({
   selector: 'app-chat',
@@ -32,10 +28,11 @@ export class ChatComponent implements OnInit {
   }
 
   @Input() character: SimpleCharacterInterface | null = null;
+  @ViewChild("chatContainer") private chatContainer!: ElementRef;
   rules: string = "";
   answer: string = '';
   isLoading: boolean = false;
-  conversation: Message[] = [];
+  conversation: ChatMessage[] = [];
   downloading: boolean = false;
   language: string = '';
 
@@ -50,7 +47,6 @@ export class ChatComponent implements OnInit {
     } else {
       this.language = this.translateService.defaultLang
     }
-
     await this.startStory();
   }
 
@@ -63,10 +59,10 @@ export class ChatComponent implements OnInit {
   async startStory(): Promise<void> {
     this.rules = Prompts.darkFantasyMaster(this.character, this.getLanguageFullValue(this.language));
     try {
-      await this.ollamaService.generateChatStream(this.rules, (message: Message) => {
-        this.pushOrUpdateAssistantMessage(message);
+      await this.ollamaService.generateChatStream(this.rules, (message: ChatMessage) => {
+        this.pushOrUpdateAssistantChatMessage(message);
+        this.scrollToBottom()
       });
-
     } catch (error) {
       console.log(error);
     } finally {
@@ -102,13 +98,13 @@ export class ChatComponent implements OnInit {
     if (!this.answer.trim()) return;
 
     this.isLoading = true;
-    const playerMessage: Message = {role: 'user', content: this.answer};
-    this.conversation.push(playerMessage);
+    const playerChatMessage: ChatMessage = {role: 'user', content: this.answer};
+    this.conversation.push(playerChatMessage);
 
     try {
-      await this.ollamaService.generateChatStream(this.answer, (message: Message) => {
+      await this.ollamaService.generateChatStream(this.answer, (message: ChatMessage) => {
         this.answer = '';
-        this.pushOrUpdateAssistantMessage(message);
+        this.pushOrUpdateAssistantChatMessage(message);
       });
     } catch (error) {
       console.error(ErrorMessages.streamingError, error);
@@ -124,7 +120,7 @@ export class ChatComponent implements OnInit {
    *
    * @param message The message from the assistant to be added or updated.
    */
-  private pushOrUpdateAssistantMessage(message: Message): void {
+  private pushOrUpdateAssistantChatMessage(message: ChatMessage): void {
     if (
       this.conversation.length > 0 &&
       this.conversation[this.conversation.length - 1].role === message.role &&
@@ -166,12 +162,11 @@ export class ChatComponent implements OnInit {
     const fullConversation = this.conversation
       .map(msg => `${msg.role === RoleEnum.user ? 'Player' : 'MJ'} : ${msg.content}`)
       .join('\n');
-
     const prompt = Prompts.getSummarizePrompt(fullConversation);
     this.isLoading = true;
     let summary = '';
     try {
-      await this.ollamaService.generateChatStream(prompt, (message: Message) => {
+      await this.ollamaService.generateChatStream(prompt, (message: ChatMessage) => {
         summary += message.content;
       });
       this.downloadConversation();
@@ -181,5 +176,16 @@ export class ChatComponent implements OnInit {
       this.isLoading = false;
       this.downloading = false;
     }
+  }
+
+  private scrollToBottom(): void {
+    try {
+      this.chatContainer.nativeElement.scroll({
+        top: this.chatContainer.nativeElement.scrollHeight,
+        behavior: 'smooth'
+      });
+    } catch (error) {
+    }
+
   }
 }

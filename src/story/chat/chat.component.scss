@@ -23,11 +23,14 @@
     box-shadow: 10px 10px 85px 20px rgba(0, 0, 0, 0.81);
     white-space: pre-line;
     overflow: auto;
+    scrollbar-width: none;
 
     .chat-content {
       color: $golden;
       font-size: $small-font-size;
       margin: 1vh 1vw;
+      overflow-y: auto;
+      height: 95%;
 
       .user {
         text-align: right;

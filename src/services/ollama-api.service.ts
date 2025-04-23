@@ -2,11 +2,8 @@ import {Injectable} from '@angular/core';
 import {environments} from '../environments/environments';
 import {RoleEnum} from '../utils/RoleEnum';
 import {HttpMethodEnum} from '../utils/HttpMethodEnum';
+import {ChatMessage} from '../interfaces/chatMessageInterface';
 
-interface ChatMessage {
-  role: string;
-  content: string;
-}
 
 @Injectable({
   providedIn: 'root'
