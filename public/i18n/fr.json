@@ -56,5 +56,7 @@
       "label": "Paladin déchu",
       "description": "Autrefois symbole de vertu, votre serment est rompu et vos dieux vous ont abandonné."
     }
-  }
+  },
+  "next": "Suivant"
+
 }

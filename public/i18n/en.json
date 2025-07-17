@@ -56,5 +56,6 @@
       "label": "Fallen Paladin",
       "description": "Once a beacon of virtue, your oath is broken and your gods have turned their backs."
     }
-  }
+  },
+  "next": "Next"
 }
