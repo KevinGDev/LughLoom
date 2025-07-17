@@ -55,7 +55,8 @@ export class OllamaService {
     return {
       model: environments.model,
       messages: this._messages,
-      stream: true
+      stream: true,
+      think: false
     };
   }
 
