@@ -1,6 +1,9 @@
 # LughLoom
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.6.
+Lughloom is a work n progress role-paying game powered by LLM. 
+
+It needs Ollama installed and running and the model you want (has to be changed in the code).
 
 ## Development server
 
