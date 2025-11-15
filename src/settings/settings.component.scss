@@ -1,0 +1,101 @@
+@import "../styles/variables";
+
+.settings-container {
+  max-width: 450px;
+  margin: 100px auto 0;
+  padding: 30px;
+
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid $golden;
+  border-radius: 8px;
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.5s ease-out;
+
+  h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: $golden;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: $garamond;
+  }
+}
+
+.setting-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+
+  label {
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+    color: lighten($golden, 20%);
+    font-family: $garamond;
+  }
+
+  input {
+    padding: 10px 12px;
+    border: 1px solid $golden;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: lighten($golden, 15%);
+      background: rgba(30, 20, 0, 0.4);
+      box-shadow: 0 0 10px rgba($golden, 0.4);
+    }
+  }
+}
+
+.btn-save {
+  width: 100%;
+  background: none;
+  border: 2px solid $golden;
+  padding: 12px;
+  color: $golden;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: $garamond;
+
+  &:hover {
+    background: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 15px rgba($golden, 0.3);
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile optimisation */
+@media (max-width: 600px) {
+  .settings-container {
+    margin-top: 60px;
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+  }
+}

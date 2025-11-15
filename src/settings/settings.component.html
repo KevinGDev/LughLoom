@@ -1,0 +1,16 @@
+<img (click)="backToHome()" ngSrc="/assets/left-arrow.png" alt="left-arrow" height="50" width="50"/>
+<div class="settings-container">
+
+  <h2>{{ 'Settings' | translate }}</h2>
+  <div class="setting-group">
+    <label>{{ 'Ollama URL' | translate }}</label>
+    <input type="text" [(ngModel)]="config.ollamaUrl">
+  </div>
+
+  <div class="setting-group">
+    <label>{{ 'Model' | translate }}</label>
+    <input type="text" [(ngModel)]="config.model">
+  </div>
+
+  <button class="btn-save" (click)="save()">{{ 'Save' | translate }}</button>
+</div>

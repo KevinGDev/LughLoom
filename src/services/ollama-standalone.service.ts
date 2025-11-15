@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environments} from '../environments/environments';
+import {AppConfigService} from './app-config.service';
 
 interface ChatMessage {
   role: string;
@@ -12,7 +13,7 @@ interface ChatMessage {
 export class OllamaStandaloneService {
   private readonly messages: ChatMessage[] = [];
 
-  constructor() {
+  constructor(private configService: AppConfigService) {
   }
 
   /**
@@ -55,10 +56,12 @@ export class OllamaStandaloneService {
    * @returns La réponse HTTP
    */
   private async sendRequest(body: object): Promise<Response> {
-    return fetch(environments.ollamaUrl, {
+    const config = this.configService.getConfig();
+
+    return fetch(config.ollamaUrl, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(body)
+      body: JSON.stringify({...body, model: config.model})
     });
   }
 
