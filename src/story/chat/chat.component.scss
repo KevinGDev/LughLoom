@@ -46,7 +46,7 @@
     position: relative;
     top: 80%;
     width: 80vw;
-    height: 10vh;
+    height: 15vh;
     background-color: black;
     display: flex;
     justify-content: space-around;
@@ -57,19 +57,25 @@
 
     textarea {
       padding-left: 10px;
-      padding-top: 10px;
+      padding-top: 40px;
       background-color: transparent;
       border: none;
       outline: none;
       font-family: $garamond;
       font-size: $medium-font-size;
       color: $golden;
-      width: 90%;
-      height: 80%;
+      width: 100%;
+      height: 100%;
       text-decoration: none;
       overflow: auto;
       scrollbar-width: none;
       resize: none;
+
+      &::placeholder {
+        color: $golden;
+        font-style: italic;
+        font-size: $small-font-size;
+      }
     }
 
     button {
@@ -133,4 +139,84 @@
   to {
     -webkit-transform: rotate(360deg);
   }
+}
+
+.quill-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  opacity: 0.9;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.quill-loader .feather {
+  width: 34px;
+  height: auto;
+  opacity: 0.85;
+  animation: quillWrite 1.4s infinite alternate;
+  filter: drop-shadow(0 0 4px rgba($golden, 0.4));
+}
+
+.quill-loader .label {
+  font-family: $garamond;
+  font-size: 0.85rem;
+  color: lighten($golden, 20%);
+  letter-spacing: 0.5px;
+  animation: softPulse 2s infinite ease-in-out;
+}
+
+/* animations */
+@keyframes quillWrite {
+  0% {
+    transform: rotate(-5deg) translateX(-10px);
+  }
+  50% {
+    transform: rotate(6deg) translateX(0px);
+  }
+  100% {
+    transform: rotate(-5deg) translateX(5px);
+  }
+}
+
+@keyframes softPulse {
+  0%, 100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.choices-container {
+  display: flex;
+  flex-wrap: wrap;
+  border-right: solid 1px $golden;
+  align-items: flex-end;
+  margin: 2vh 2vw;
+}
+
+.choice-button {
+  all: unset;
+  color: $golden;
+  cursor: pointer;
+  text-align: start;
+  width: 100%;
+}
+
+.choice-button:hover {
+  color: $ivory-bone;
+  transform: scale(1.05);
 }

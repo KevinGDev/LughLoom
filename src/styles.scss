@@ -52,6 +52,18 @@ body.scrolled {
 }
 
 
+// Source - https://stackoverflow.com/a
+// Posted by Adrian Ruiz, modified by community. See post 'Timeline' for change history
+// Retrieved 2025-11-16, License - CC BY-SA 4.0
+
+.mat-mdc-snack-bar-container.snackbar {
+  color: $golden;
+  background-color: $dark-green;
+  border-radius: 10px;
+  //--mat-snack-bar-button-color: $ivory-bone;
+  //--mdc-snackbar-container-color: $ivory-bone;
+  //--mdc-snackbar-supporting-text-color: #fff;
+}
 
 
 

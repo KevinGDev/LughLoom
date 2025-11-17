@@ -1,16 +1,23 @@
-<img (click)="backToHome()" ngSrc="/assets/left-arrow.png" alt="left-arrow" height="50" width="50"/>
+<!-- Bouton retour -->
+<div class="back-button">
+  <img (click)="backToHome()" ngSrc="/assets/left-arrow.png" alt="left-arrow" height="50" width="50"/>
+</div>
+
 <div class="settings-container">
+  <h2>{{ 'settings' | translate }}</h2>
 
-  <h2>{{ 'Settings' | translate }}</h2>
+  <!-- URL Ollama -->
   <div class="setting-group">
-    <label>{{ 'Ollama URL' | translate }}</label>
-    <input type="text" [(ngModel)]="config.ollamaUrl">
+    <label for="ollamaUrl">{{ 'ollamaUrl' | translate }}</label>
+    <input id="ollamaUrl" type="text" [(ngModel)]="config.ollamaUrl" placeholder="Enter Ollama URL"/>
   </div>
 
+  <!-- Model -->
   <div class="setting-group">
-    <label>{{ 'Model' | translate }}</label>
-    <input type="text" [(ngModel)]="config.model">
+    <label for="model">{{ 'model' | translate }}</label>
+    <input id="model" type="text" [(ngModel)]="config.model" placeholder="Enter model name"/>
   </div>
 
-  <button class="btn-save" (click)="save()">{{ 'Save' | translate }}</button>
+  <!-- Bouton sauvegarder -->
+  <button class="btn-save" (click)="save()">{{ 'save' | translate }}</button>
 </div>

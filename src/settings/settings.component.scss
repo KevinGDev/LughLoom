@@ -30,7 +30,7 @@
   label {
     font-size: 1.1rem;
     margin-bottom: 6px;
-    color: lighten($golden, 20%);
+    color: $golden;
     font-family: $garamond;
   }
 
@@ -45,7 +45,7 @@
 
     &:focus {
       outline: none;
-      border-color: lighten($golden, 15%);
+      border-color: $golden;
       background: rgba(30, 20, 0, 0.4);
       box-shadow: 0 0 10px rgba($golden, 0.4);
     }
@@ -99,3 +99,4 @@
     font-size: 1.6rem;
   }
 }
+

@@ -1,72 +1,67 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {TranslatePipe, TranslateService} from "@ngx-translate/core";
-import {FormsModule} from "@angular/forms";
-import {NgClass} from '@angular/common';
-import {OllamaService} from '../../services/ollama-api.service';
-import {Prompts} from '../../utils/Prompts';
-import {RoleEnum} from '../../utils/RoleEnum';
-import {SimpleCharacterInterface} from '../../interfaces/simpleCharacterInterface';
-import {MarkdownComponent} from 'ngx-markdown';
-import {Language} from '../../utils/LanguagesEnum';
-import {ChatMessage} from '../../interfaces/chatMessageInterface';
-import {ErrorMessages} from '../../utils/ErrorMessages';
-
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { TranslatePipe, TranslateService } from "@ngx-translate/core";
+import { FormsModule } from "@angular/forms";
+import { NgClass } from '@angular/common';
+import { OllamaService } from '../../services/ollama-api.service';
+import { Prompts } from '../../utils/Prompts';
+import { RoleEnum } from '../../utils/RoleEnum';
+import { SimpleCharacterInterface } from '../../interfaces/simpleCharacterInterface';
+import { MarkdownComponent } from 'ngx-markdown';
+import { Language } from '../../utils/LanguagesEnum';
+import { ChatMessage } from '../../interfaces/chatMessageInterface';
+import { ErrorMessages } from '../../utils/ErrorMessages';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
   imports: [TranslatePipe, FormsModule, NgClass, MarkdownComponent],
   templateUrl: './chat.component.html',
-  styleUrl: './chat.component.scss'
+  styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
 
   constructor(
     private readonly ollamaService: OllamaService,
     private readonly translateService: TranslateService
-  ) {
-  }
+  ) {}
 
   @Input() character: SimpleCharacterInterface | null = null;
   @ViewChild("chatContainer") private chatContainer!: ElementRef;
+
+  choices: string[] = [];
   rules: string = "";
   answer: string = '';
   isLoading: boolean = false;
+  isTyping: boolean = false;
   conversation: ChatMessage[] = [];
   downloading: boolean = false;
   language: string = '';
 
-  /**
-   * Initializes the component, loading the story at the start.
-   * This function will be called when the component is initialized.
-   */
   async ngOnInit(): Promise<void> {
     this.isLoading = true;
-    if (this.translateService.currentLang !== undefined) {
-      this.language = this.translateService.currentLang
-    } else {
-      this.language = this.translateService.defaultLang
-    }
+    this.language = this.translateService.currentLang || this.translateService.defaultLang;
     await this.startStory();
   }
 
-  /**
-   * Starts the story by sending the initial prompt to the Ollama service
-   * and processing the response in a chat stream.
-   *
-   * @throws Error if there's an issue while processing the stream.
-   */
   async startStory(): Promise<void> {
+    this.isTyping = true;
+
     this.rules = Prompts.darkFantasyMaster(this.character, this.getLanguageFullValue(this.language));
     try {
       await this.ollamaService.generateChatStream(this.rules, (message: ChatMessage) => {
         this.pushOrUpdateAssistantChatMessage(message);
-        this.scrollToBottom()
+        this.scrollToBottom();
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
+      this.isTyping = false;
       this.isLoading = false;
+
+      const lastMessage = this.conversation[this.conversation.length - 1];
+      if (lastMessage && lastMessage.role !== RoleEnum.user) {
+        this.extractStoryAndChoices(lastMessage.content);
+      }
     }
   }
 
@@ -74,32 +69,22 @@ export class ChatComponent implements OnInit {
     return Language[language as keyof typeof Language];
   }
 
-  /**
-   * Handles the key down event for the Enter key. When Enter is pressed,
-   * it sends the user's input as a message to the server.
-   *
-   * @param event The keyboard event triggered when the user presses a key.
-   */
   async handleKeyDown(event: KeyboardEvent): Promise<void> {
-    let enter = 'Enter';
-    if (event.key === enter) {
+    if (event.key === 'Enter') {
       event.preventDefault();
       await this.sendAnswer();
     }
   }
 
-  /**
-   * Sends the user's answer as a message to the Ollama service for streaming.
-   * It will push the player's message to the conversation and update the assistant's reply.
-   *
-   * @throws Error if there's an issue while generating the chat stream.
-   */
   async sendAnswer(): Promise<void> {
+    this.isTyping = true;
     if (!this.answer.trim()) return;
 
     this.isLoading = true;
-    const playerChatMessage: ChatMessage = {role: 'user', content: this.answer};
+    const playerChatMessage: ChatMessage = { role: 'user', content: this.answer };
     this.conversation.push(playerChatMessage);
+
+    this.choices = [];
 
     try {
       await this.ollamaService.generateChatStream(this.answer, (message: ChatMessage) => {
@@ -109,17 +94,28 @@ export class ChatComponent implements OnInit {
     } catch (error) {
       console.error(ErrorMessages.streamingError, error);
     } finally {
+      this.isTyping = false;
       this.isLoading = false;
+      const lastMessage = this.conversation[this.conversation.length - 1];
+      if (lastMessage && lastMessage.role !== RoleEnum.user) {
+        this.extractStoryAndChoices(lastMessage.content);
+      }
     }
   }
 
-  /**
-   * Pushes or updates the assistant's message in the conversation.
-   * If the last message from the assistant is the same role, it will append
-   * the new content to it. Otherwise, a new message is pushed.
-   *
-   * @param message The message from the assistant to be added or updated.
-   */
+  private extractStoryAndChoices(text: string) {
+    text = text.replace(/\r/g, '').trim();
+    const choiceMatches = text.match(/(\d+\s*-[^\n]+)/g);
+    this.choices = choiceMatches
+      ? choiceMatches.map(c => c.replace(/^\d+\s*-\s*/, '').trim())
+      : [];
+  }
+
+  clickChoice(choice: string): void {
+    this.answer = choice;
+    this.sendAnswer().then();
+  }
+
   private pushOrUpdateAssistantChatMessage(message: ChatMessage): void {
     if (
       this.conversation.length > 0 &&
@@ -128,18 +124,14 @@ export class ChatComponent implements OnInit {
     ) {
       this.conversation[this.conversation.length - 1].content += message.content;
     } else {
-      this.conversation.push({role: message.role, content: message.content});
+      this.conversation.push({ role: message.role, content: message.content });
     }
+    this.scrollToBottom();
   }
 
-  /**
-   * Downloads the current conversation as a JSON file.
-   * The conversation is converted to a JSON string, then a Blob is created to
-   * allow the user to download the file.
-   */
   downloadConversation(): void {
     const dataStr = JSON.stringify(this.conversation, null, 2);
-    const blob = new Blob([dataStr], {type: 'application/json'});
+    const blob = new Blob([dataStr], { type: 'application/json' });
     const url = window.URL.createObjectURL(blob);
 
     const a = document.createElement('a');
@@ -150,13 +142,6 @@ export class ChatComponent implements OnInit {
     window.URL.revokeObjectURL(url);
   }
 
-  /**
-   * Summarizes the entire conversation and triggers the download of the conversation.
-   * The summary is generated using a custom prompt, and the result is appended
-   * to the conversation before triggering the download.
-   *
-   * @throws Error if there's an issue with the summarization or download.
-   */
   async summarizeAndDownload(): Promise<void> {
     this.downloading = true;
     const fullConversation = this.conversation
@@ -184,8 +169,6 @@ export class ChatComponent implements OnInit {
         top: this.chatContainer.nativeElement.scrollHeight,
         behavior: 'smooth'
       });
-    } catch (error) {
-    }
-
+    } catch {}
   }
 }

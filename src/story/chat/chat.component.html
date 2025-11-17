@@ -14,17 +14,38 @@
             }
           </div>
         }
+        @if (this.isTyping) {
+          <div class="quill-loader">
+            <img src="/assets/quill.png" alt="writing quill" class="feather"/>
+            <span class="label">{{ 'writing' | translate }}</span>
+          </div>
+        }
       </div>
+
     }
   </div>
 
   <div class="chat-textbox">
-    <textarea [(ngModel)]="answer" (keydown)="handleKeyDown($event)"
-              [disabled]="isLoading" [ngClass]="isLoading?'disabled':'enabled'"></textarea>
+    @if (choices.length > 0) {
+      <div class="choices-container">
+        @for (choice of choices; track choice) {
+          <button (click)="clickChoice(choice)" class="choice-button">
+            {{ choice }}
+          </button>
+        }
+      </div>
+    }
+    <textarea placeholder="{{'textAreaPlaceHolder'| translate }}"
+              [(ngModel)]="answer" (keydown)="handleKeyDown($event)"
+              [disabled]="isLoading" [ngClass]="isLoading?'disabled':'enabled'">
+
+
+    </textarea>
     <button (click)="sendAnswer()" [disabled]="isLoading" [ngClass]="isLoading?'disabled':'enabled'">
       <img src="/assets/send-icon.png" alt="Send message">
     </button>
   </div>
+
 
   <button class="download-tale-button" (click)="summarizeAndDownload()">
     @if (!downloading) {
