@@ -1,0 +1,44 @@
+<main class="main">
+  <div class="head">
+    <h1 class="title"> LùghLoom </h1>
+
+    <nav class="navigation">
+      <ul>
+        <!--              <li class="nav-item"><a href="">{{ 'navAdventures'| translate }}</a></li>-->
+        <!--              <li class="nav-item"><a href="">{{ 'navStories'| translate }}</a></li>-->
+        <!--              <li class="nav-item"><a href="">{{ 'navProfile'| translate }}</a></li>-->
+        <li class="nav-item">
+          <a routerLink="/settings">{{ 'settings' | translate }}</a>
+        </li>      </ul>
+    </nav>
+  </div>
+  @if (selectedContent === 'home') {
+    <div class="middle">
+      <p>{{ 'joinQuestText' | translate }}</p>
+      <button class="button" (click)="startAdventure()">
+        {{ 'startAdventureButton'|translate }}
+      </button>
+
+      <div class="language-selector">
+        <button (click)="translateText('fr')">
+          <img class="language-flag" src="/assets/fr-flag.png" alt="french flag">
+        </button>
+        <button (click)="translateText('en')">
+          <img class="language-flag" src="/assets/uk-flag.png" alt="united kingdom flag">
+        </button>
+      </div>
+    </div>
+  } @else if (selectedContent === 'story') {
+    <app-story></app-story>
+  } @else if (selectedContent === 'settings') {
+    <app-settings></app-settings>
+  }
+
+
+  <div class="footer">
+    <a style="cursor:pointer;" (click)="goToAbout()">
+      {{ 'about'| translate }}
+    </a>
+  </div>
+</main>
+

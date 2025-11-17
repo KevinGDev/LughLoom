@@ -1,0 +1,123 @@
+@import "../styles/variables";
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2%;
+  font-family: "Cinzel", serif;
+  text-align: center;
+  color: $golden;
+}
+
+/* ---------- TITLE ---------- */
+
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 0 0 10px rgba(255, 204, 102, 0.4);
+}
+
+/* ---------- NAVIGATION ---------- */
+
+.navigation ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.nav-item a {
+  text-decoration: none;
+  color: $golden;
+  font-size: 1.2rem;
+  transition: 0.2s ease;
+  cursor: pointer;
+}
+
+.nav-item a:hover {
+  color: $ivory-bone;
+  text-shadow: 0 0 5px gold;
+}
+
+/* ---------- MIDDLE CONTENT ---------- */
+
+.middle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.8rem;
+  margin-top: 3rem;
+}
+
+.button {
+  transition: 0.2s ease;
+}
+
+.button:hover {
+  transform: scale(1.05);
+  transition: 0.2s ease;
+  box-shadow: 0 0 15px gold;
+}
+
+/* ---------- LANGUAGE SELECTOR ---------- */
+
+.language-selector {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.language-selector button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform .5s ease;
+  box-shadow: none;
+}
+
+.language-selector button:hover {
+  transform: rotate(180deg);
+}
+
+.language-flag {
+  width: 35px;
+  border: none;
+  height: auto;
+}
+
+/* ---------- FOOTER ---------- */
+
+.footer {
+  width: 95vw;
+  bottom: 0;
+  padding-top: 2rem;
+}
+
+.footer a {
+  text-decoration: none;
+  color: #b09b75;
+  font-size: 1.1rem;
+  transition: 0.2s ease;
+  cursor: pointer;
+}
+
+.footer a:hover {
+  color: #fff;
+  text-shadow: 0 0 5px gold;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 600px) {
+  .navigation ul {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .title {
+    font-size: 2.2rem;
+  }
+}
