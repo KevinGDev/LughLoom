@@ -16,7 +16,7 @@
         }
         @if (this.isTyping) {
           <div class="quill-loader">
-            <img src="/assets/quill.png" alt="writing quill" class="feather"/>
+            <img src="assets/quill.png" alt="writing quill" class="feather"/>
             <span class="label">{{ 'writing' | translate }}</span>
           </div>
         }
@@ -42,7 +42,7 @@
 
     </textarea>
     <button (click)="sendAnswer()" [disabled]="isLoading" [ngClass]="isLoading?'disabled':'enabled'">
-      <img src="/assets/send-icon.png" alt="Send message">
+      <img src="assets/send-icon.png" alt="Send message">
     </button>
   </div>
 
