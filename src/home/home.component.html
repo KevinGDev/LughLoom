@@ -4,12 +4,13 @@
 
     <nav class="navigation">
       <ul>
-        <!--              <li class="nav-item"><a href="">{{ 'navAdventures'| translate }}</a></li>-->
-        <!--              <li class="nav-item"><a href="">{{ 'navStories'| translate }}</a></li>-->
-        <!--              <li class="nav-item"><a href="">{{ 'navProfile'| translate }}</a></li>-->
+        <li class="nav-item">
+          <a routerLink="/about">{{ 'about' | translate }}</a>
+          </li>
         <li class="nav-item">
           <a routerLink="/settings">{{ 'settings' | translate }}</a>
-        </li>      </ul>
+        </li>
+      </ul>
     </nav>
   </div>
   @if (selectedContent === 'home') {
@@ -33,12 +34,5 @@
   } @else if (selectedContent === 'settings') {
     <app-settings></app-settings>
   }
-
-
-  <div class="footer">
-    <a style="cursor:pointer;" (click)="goToAbout()">
-      {{ 'about'| translate }}
-    </a>
-  </div>
 </main>
 

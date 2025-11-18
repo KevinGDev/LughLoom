@@ -6,8 +6,13 @@
 <div class="settings-container">
   <h2>{{ 'settings' | translate }}</h2>
 
+
   <!-- URL Ollama -->
   <div class="setting-group">
+    <app-volume></app-volume>
+  </div>
+  <div class="setting-group">
+
     <label for="ollamaUrl">{{ 'ollamaUrl' | translate }}</label>
     <input id="ollamaUrl" type="text" [(ngModel)]="config.ollamaUrl" placeholder="Enter Ollama URL"/>
   </div>

@@ -5,6 +5,7 @@ import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {NgOptimizedImage} from '@angular/common';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {VolumeComponent} from '../volume/volume.component';
 
 @Component({
   selector: 'app-settings',
@@ -12,7 +13,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
   imports: [
     FormsModule,
     TranslatePipe,
-    NgOptimizedImage
+    NgOptimizedImage,
+    VolumeComponent
   ],
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
