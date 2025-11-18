@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { RoleEnum } from '../utils/RoleEnum';
-import { HttpMethodEnum } from '../utils/HttpMethodEnum';
 import { ChatMessage } from '../interfaces/chatMessageInterface';
 import { AppConfigService } from './app-config.service';
+import { invoke } from '@tauri-apps/api/core';
+import { listen, UnlistenFn } from '@tauri-apps/api/event';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OllamaService {
 
-  private readonly headers = { 'Content-Type': 'application/json' };
-  private readonly decoder = new TextDecoder('utf-8');
   private readonly messages: ChatMessage[] = [];
+  private readonly STREAM_DELAY = 100; // ms entre chaque chunk affiché
 
   constructor(private config: AppConfigService) {}
 
@@ -19,6 +19,8 @@ export class OllamaService {
     userPrompt: string,
     onChunk: (message: ChatMessage) => void
   ): Promise<ChatMessage> {
+
+    console.log('🟢 Starting generateChatStream...');
 
     const config = this.config.getConfig();
     if (!config.ollamaUrl || !config.model) {
@@ -28,46 +30,76 @@ export class OllamaService {
     const userMessage: ChatMessage = { role: RoleEnum.user, content: userPrompt };
     this.messages.push(userMessage);
 
-    const response = await fetch(config.ollamaUrl, {
-      method: HttpMethodEnum.post,
-      headers: this.headers,
-      body: JSON.stringify({
-        model: config.model,
-        messages: this.messages,
-        stream: true,
-        think: false
-      })
-    });
-
-    if (!response.body) throw new Error('❌ No response stream received from Ollama');
-
-    const { message, role } = await this.processStream(response.body, onChunk);
-
-    if (message.trim()) {
-      this.messages.push({ role, content: message });
-    }
-
-    return { role, content: message };
-  }
-
-  private async processStream(
-    stream: ReadableStream<Uint8Array>,
-    onChunk: (message: ChatMessage) => void
-  ): Promise<{ message: string; role: string }> {
-
-    const reader = stream.getReader();
-    let role: RoleEnum = RoleEnum.assistant;
     let fullMessage = '';
+    let role: RoleEnum = RoleEnum.assistant;
+    let chunkCount = 0;
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
+    // Buffer pour le throttling
+    const chunkBuffer: string[] = [];
+    let processingInterval: any = null;
 
-      const chunk = this.decoder.decode(value, { stream: true });
-      fullMessage += this.parseChunk(chunk, onChunk, r => (role = r || role));
-    }
+    return new Promise(async (resolve, reject) => {
+      let unlistenChunk: UnlistenFn | null = null;
+      let unlistenDone: UnlistenFn | null = null;
+      let streamFinished = false;
 
-    return { message: fullMessage, role };
+      // Démarrer le traitement du buffer avec un intervalle fixe
+      processingInterval = setInterval(() => {
+        if (chunkBuffer.length > 0) {
+          const bufferedChunk = chunkBuffer.shift()!;
+          const chunk = this.parseChunk(bufferedChunk, onChunk, r => (role = r || role));
+          fullMessage += chunk;
+          console.log(`🎨 Displayed chunk. Buffer remaining: ${chunkBuffer.length}`);
+        } else if (streamFinished) {
+          // Stream terminé et buffer vide
+          clearInterval(processingInterval);
+
+          console.log('✅ All chunks displayed. Full message length:', fullMessage.length);
+
+          if (unlistenChunk) unlistenChunk();
+          if (unlistenDone) unlistenDone();
+
+          if (fullMessage.trim()) {
+            this.messages.push({ role, content: fullMessage });
+          }
+
+          resolve({ role, content: fullMessage });
+        }
+      }, this.STREAM_DELAY);
+
+      try {
+        console.log('🟢 Setting up listeners...');
+
+        unlistenChunk = await listen<string>('ollama-chunk', (event) => {
+          chunkCount++;
+          console.log(`📦 Chunk #${chunkCount} received, adding to buffer (current size: ${chunkBuffer.length})`);
+
+          // Ajouter au buffer
+          chunkBuffer.push(event.payload);
+        });
+
+        unlistenDone = await listen('ollama-done', () => {
+          console.log('✅ Stream done. Total chunks received:', chunkCount);
+          console.log('📊 Buffer size:', chunkBuffer.length);
+          streamFinished = true;
+        });
+
+        console.log('🟢 Invoking Rust command...');
+        await invoke('ollama_chat_stream', {
+          url: config.ollamaUrl,
+          model: config.model,
+          messages: this.messages
+        });
+        console.log('🟢 Rust command invoked');
+
+      } catch (error) {
+        console.error('❌ Error:', error);
+        if (processingInterval) clearInterval(processingInterval);
+        if (unlistenChunk) unlistenChunk();
+        if (unlistenDone) unlistenDone();
+        reject(error);
+      }
+    });
   }
 
   private parseChunk(
@@ -86,12 +118,14 @@ export class OllamaService {
         const role = parsed.message?.role as RoleEnum;
 
         if (roleUpdate) roleUpdate(role);
-        onChunk({ role, content });
 
-        output += content;
+        if (content) {
+          onChunk({ role, content });
+          output += content;
+        }
 
       } catch (err) {
-        console.warn('⚠️ Parsing error:', err, line);
+        console.warn('⚠️ Parsing error:', err, line.substring(0, 50));
       }
     }
 

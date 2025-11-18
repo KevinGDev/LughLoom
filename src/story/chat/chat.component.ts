@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import { FormsModule } from "@angular/forms";
 import { NgClass } from '@angular/common';
@@ -11,6 +11,10 @@ import { Language } from '../../utils/LanguagesEnum';
 import { ChatMessage } from '../../interfaces/chatMessageInterface';
 import { ErrorMessages } from '../../utils/ErrorMessages';
 
+interface DisplayMessage extends ChatMessage {
+  displayedLength?: number; // Longueur déjà affichée sans animation
+}
+
 @Component({
   selector: 'app-chat',
   standalone: true,
@@ -22,7 +26,8 @@ export class ChatComponent implements OnInit {
 
   constructor(
     private readonly ollamaService: OllamaService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   @Input() character: SimpleCharacterInterface | null = null;
@@ -33,7 +38,7 @@ export class ChatComponent implements OnInit {
   answer: string = '';
   isLoading: boolean = false;
   isTyping: boolean = false;
-  conversation: ChatMessage[] = [];
+  conversation: DisplayMessage[] = [];
   downloading: boolean = false;
   language: string = '';
 
@@ -45,11 +50,24 @@ export class ChatComponent implements OnInit {
 
   async startStory(): Promise<void> {
     this.isTyping = true;
-
     this.rules = Prompts.darkFantasyMaster(this.character, this.getLanguageFullValue(this.language));
+
     try {
-      await this.ollamaService.generateChatStream(this.rules, (message: ChatMessage) => {
-        this.pushOrUpdateAssistantChatMessage(message);
+      this.conversation.push({
+        role: RoleEnum.assistant,
+        content: '',
+        displayedLength: 0
+      });
+
+      await this.ollamaService.generateChatStream(this.rules, (chunk: ChatMessage) => {
+        const lastIndex = this.conversation.length - 1;
+        const lastMessage = this.conversation[lastIndex];
+
+        // Mettre à jour displayedLength AVANT d'ajouter le nouveau contenu
+        lastMessage.displayedLength = lastMessage.content.length;
+        lastMessage.content += chunk.content;
+
+        this.cdr.detectChanges();
         this.scrollToBottom();
       });
     } catch (error) {
@@ -77,30 +95,55 @@ export class ChatComponent implements OnInit {
   }
 
   async sendAnswer(): Promise<void> {
-    this.isTyping = true;
     if (!this.answer.trim()) return;
 
+    this.isTyping = true;
     this.isLoading = true;
-    const playerChatMessage: ChatMessage = { role: 'user', content: this.answer };
+
+    const playerChatMessage: DisplayMessage = { role: RoleEnum.user, content: this.answer };
     this.conversation.push(playerChatMessage);
 
+    const userInput = this.answer;
+    this.answer = '';
     this.choices = [];
 
+    this.conversation.push({
+      role: RoleEnum.assistant,
+      content: '',
+      displayedLength: 0
+    });
+
     try {
-      await this.ollamaService.generateChatStream(this.answer, (message: ChatMessage) => {
-        this.answer = '';
-        this.pushOrUpdateAssistantChatMessage(message);
+      await this.ollamaService.generateChatStream(userInput, (chunk: ChatMessage) => {
+        const lastIndex = this.conversation.length - 1;
+        const lastMessage = this.conversation[lastIndex];
+
+        lastMessage.displayedLength = lastMessage.content.length;
+        lastMessage.content += chunk.content;
+
+        this.cdr.detectChanges();
+        this.scrollToBottom();
       });
     } catch (error) {
       console.error(ErrorMessages.streamingError, error);
     } finally {
       this.isTyping = false;
       this.isLoading = false;
+
       const lastMessage = this.conversation[this.conversation.length - 1];
       if (lastMessage && lastMessage.role !== RoleEnum.user) {
         this.extractStoryAndChoices(lastMessage.content);
       }
     }
+  }
+
+  // Méthodes utilitaires pour le template
+  getDisplayedContent(message: DisplayMessage): string {
+    return message.content.substring(0, message.displayedLength || 0);
+  }
+
+  getNewContent(message: DisplayMessage): string {
+    return message.content.substring(message.displayedLength || 0);
   }
 
   private extractStoryAndChoices(text: string) {
@@ -114,19 +157,6 @@ export class ChatComponent implements OnInit {
   clickChoice(choice: string): void {
     this.answer = choice;
     this.sendAnswer().then();
-  }
-
-  private pushOrUpdateAssistantChatMessage(message: ChatMessage): void {
-    if (
-      this.conversation.length > 0 &&
-      this.conversation[this.conversation.length - 1].role === message.role &&
-      message.role !== RoleEnum.user
-    ) {
-      this.conversation[this.conversation.length - 1].content += message.content;
-    } else {
-      this.conversation.push({ role: message.role, content: message.content });
-    }
-    this.scrollToBottom();
   }
 
   downloadConversation(): void {
@@ -149,12 +179,26 @@ export class ChatComponent implements OnInit {
       .join('\n');
     const prompt = Prompts.getSummarizePrompt(fullConversation);
     this.isLoading = true;
+
     let summary = '';
     try {
-      await this.ollamaService.generateChatStream(prompt, (message: ChatMessage) => {
-        summary += message.content;
+      await this.ollamaService.generateChatStream(prompt, (chunk: ChatMessage) => {
+        summary += chunk.content;
       });
-      this.downloadConversation();
+
+      const dataStr = JSON.stringify({
+        summary,
+        conversation: this.conversation
+      }, null, 2);
+
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'conversation-summary.json';
+      a.click();
+      window.URL.revokeObjectURL(url);
+
     } catch (error) {
       console.error(ErrorMessages.downloadError, error);
     } finally {
