@@ -2,6 +2,15 @@ import {Component} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 
 
+declare global {
+  interface Window {
+    electronAPI: {
+      sendMessage:
+        (message: string) => void;
+    }
+  }
+}
+
 @Component({
   selector: 'app-component',
   templateUrl: './app.component.html',
@@ -10,4 +19,8 @@ import {RouterOutlet} from '@angular/router';
   imports: [RouterOutlet]
 })
 export class AppComponent {
+  sendMessage() {
+    window.electronAPI.sendMessage("Hello from Angular!");
+  }
+
 }
