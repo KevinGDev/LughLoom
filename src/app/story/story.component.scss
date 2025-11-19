@@ -1,4 +1,4 @@
-@use "variables" as *;
+@use "../../styles/variables" as *;
 
 .character-creation-screen {
   display: flex;
@@ -47,7 +47,7 @@
           color: $ivory-bone;
           flex: 0 0 20vw;
           font-weight: bold;
-          background-image: url("/assets/card-background.png");
+          background-image: url("/src/assets/card-background.png");
           background-size: cover;
           background-repeat: no-repeat;
           box-shadow: inset 9px -6px 50px 23px #000000;

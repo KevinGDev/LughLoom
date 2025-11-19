@@ -1,11 +1,11 @@
 import {Component} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {NgClass} from '@angular/common';
-import {backgrounds} from '../utils/BackgroundEnum';
+import {backgrounds} from '../../utils/BackgroundEnum';
 import {ChatComponent} from './chat/chat.component';
-import {SimpleBackgroundInterface} from '../interfaces/simpleBackgroundInterface';
-import {BackgroundInterface} from '../interfaces/backgroundInterface';
-import {SimpleCharacterInterface} from '../interfaces/simpleCharacterInterface';
+import {SimpleBackgroundInterface} from '../../interfaces/simpleBackgroundInterface';
+import {BackgroundInterface} from '../../interfaces/backgroundInterface';
+import {SimpleCharacterInterface} from '../../interfaces/simpleCharacterInterface';
 import {TranslatePipe} from '@ngx-translate/core';
 
 

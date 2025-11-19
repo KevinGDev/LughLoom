@@ -2,14 +2,14 @@ import { Component, ElementRef, Input, OnInit, ViewChild, ChangeDetectorRef } fr
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import { FormsModule } from "@angular/forms";
 import { NgClass } from '@angular/common';
-import { OllamaService } from '../../services/ollama-api.service';
-import { Prompts } from '../../utils/Prompts';
-import { RoleEnum } from '../../utils/RoleEnum';
-import { SimpleCharacterInterface } from '../../interfaces/simpleCharacterInterface';
+import { OllamaService } from '../../../services/ollama-api.service';
+import { Prompts } from '../../../utils/Prompts';
+import { RoleEnum } from '../../../utils/RoleEnum';
+import { SimpleCharacterInterface } from '../../../interfaces/simpleCharacterInterface';
 import { MarkdownComponent } from 'ngx-markdown';
-import { Language } from '../../utils/LanguagesEnum';
-import { ChatMessage } from '../../interfaces/chatMessageInterface';
-import { ErrorMessages } from '../../utils/ErrorMessages';
+import { Language } from '../../../utils/LanguagesEnum';
+import { ChatMessage } from '../../../interfaces/chatMessageInterface';
+import { ErrorMessages } from '../../../utils/ErrorMessages';
 
 interface DisplayMessage extends ChatMessage {
   displayedLength?: number; // Longueur déjà affichée sans animation

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {AppConfigService} from '../services/app-config.service';
+import {AppConfigService} from '../../services/app-config.service';
 import {FormsModule} from '@angular/forms';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {NgOptimizedImage} from '@angular/common';

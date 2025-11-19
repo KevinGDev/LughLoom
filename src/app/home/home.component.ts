@@ -3,7 +3,7 @@ import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {Router, RouterLink} from '@angular/router';
 import {StoryComponent} from '../story/story.component';
 import {SettingsComponent} from '../settings/settings.component';
-import {AudioService} from '../services/audio.service';
+import {AudioService} from '../../services/audio.service';
 
 @Component({
   selector: 'app-home',
