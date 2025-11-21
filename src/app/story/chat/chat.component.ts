@@ -13,7 +13,7 @@ import {ErrorMessages} from '../../../utils/ErrorMessages';
 import {LughDiceComponent} from '../lughdice/lughdice.component';
 
 interface DisplayMessage extends ChatMessage {
-  displayedLength?: number; // Longueur déjà affichée sans animation
+  displayedLength?: number;
 }
 
 @Component({
