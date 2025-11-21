@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {Router, RouterLink} from '@angular/router';
+import {RouterLink} from '@angular/router';
 import {StoryComponent} from '../story/story.component';
 import {SettingsComponent} from '../settings/settings.component';
 import {AudioService} from '../../services/audio.service';
@@ -15,7 +15,7 @@ import {AudioService} from '../../services/audio.service';
 export class HomeComponent {
   protected selectedContent: string = 'home';
 
-  constructor(private translate: TranslateService, private router: Router, private audioService: AudioService) {
+  constructor(private translate: TranslateService, private audioService: AudioService) {
   }
 
 
@@ -26,9 +26,7 @@ export class HomeComponent {
   startAdventure() {
     this.selectedContent = 'story';
     document.body.classList.add('scrolled');
-    const audio = new Audio('assets/bell.mp3');
-    this.audioService.playSfx('/assets/bell.mp3');
-    audio.play();
+    this.audioService.playSfx('/assets/sfx/bell.mp3');
   }
 
 }

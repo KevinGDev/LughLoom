@@ -21,11 +21,14 @@
           </div>
         }
       </div>
-
     }
   </div>
 
+
   <div class="chat-textbox">
+    @if(dice){
+      <lughdice  (click)="d20.rollWithPseudo3DRotation()" #d20 [size]="150"></lughdice>
+    }
     @if (choices.length > 0) {
       <div class="choices-container">
         @for (choice of choices; track choice) {

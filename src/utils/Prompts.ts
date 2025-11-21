@@ -27,6 +27,7 @@ For example :
 3 - Revenir à la taverne
 </choices>
 
+"Quand un joueur effectue une action qui nécessite un test aléatoire, propose un lancer de dé. Envoie-le sous la forme d’un objet JSON { "type": "ROLL_DICE", "dice": "d20", "reason": "..."} . Sinon, continue normalement la narration."
 
 📜 Story Introduction:
   The player is named ${character?.name} and is background is : ${character?.background.description}. At start explain who he is, what is his background.

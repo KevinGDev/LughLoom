@@ -1,15 +1,16 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { TranslatePipe, TranslateService } from "@ngx-translate/core";
-import { FormsModule } from "@angular/forms";
-import { NgClass } from '@angular/common';
-import { OllamaService } from '../../../services/ollama-api.service';
-import { Prompts } from '../../../utils/Prompts';
-import { RoleEnum } from '../../../utils/RoleEnum';
-import { SimpleCharacterInterface } from '../../../interfaces/simpleCharacterInterface';
-import { MarkdownComponent } from 'ngx-markdown';
-import { Language } from '../../../utils/LanguagesEnum';
-import { ChatMessage } from '../../../interfaces/chatMessageInterface';
-import { ErrorMessages } from '../../../utils/ErrorMessages';
+import {ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
+import {FormsModule} from "@angular/forms";
+import {NgClass} from '@angular/common';
+import {OllamaService} from '../../../services/ollama-api.service';
+import {Prompts} from '../../../utils/Prompts';
+import {RoleEnum} from '../../../utils/RoleEnum';
+import {SimpleCharacterInterface} from '../../../interfaces/simpleCharacterInterface';
+import {MarkdownComponent} from 'ngx-markdown';
+import {Language} from '../../../utils/LanguagesEnum';
+import {ChatMessage} from '../../../interfaces/chatMessageInterface';
+import {ErrorMessages} from '../../../utils/ErrorMessages';
+import {LughDiceComponent} from '../lughdice/lughdice.component';
 
 interface DisplayMessage extends ChatMessage {
   displayedLength?: number; // Longueur déjà affichée sans animation
@@ -18,7 +19,7 @@ interface DisplayMessage extends ChatMessage {
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [TranslatePipe, FormsModule, NgClass, MarkdownComponent],
+  imports: [TranslatePipe, FormsModule, NgClass, MarkdownComponent, LughDiceComponent],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
@@ -28,7 +29,8 @@ export class ChatComponent implements OnInit {
     private readonly ollamaService: OllamaService,
     private readonly translateService: TranslateService,
     private readonly cdr: ChangeDetectorRef
-  ) {}
+  ) {
+  }
 
   @Input() character: SimpleCharacterInterface | null = null;
   @ViewChild("chatContainer") private chatContainer!: ElementRef;
@@ -41,6 +43,7 @@ export class ChatComponent implements OnInit {
   conversation: DisplayMessage[] = [];
   downloading: boolean = false;
   language: string = '';
+  dice: boolean = true;
 
   async ngOnInit(): Promise<void> {
     this.isLoading = true;
@@ -100,7 +103,7 @@ export class ChatComponent implements OnInit {
     this.isTyping = true;
     this.isLoading = true;
 
-    const playerChatMessage: DisplayMessage = { role: RoleEnum.user, content: this.answer };
+    const playerChatMessage: DisplayMessage = {role: RoleEnum.user, content: this.answer};
     this.conversation.push(playerChatMessage);
 
     const userInput = this.answer;
@@ -137,7 +140,7 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  // Méthodes utilitaires pour le template
+
   getDisplayedContent(message: DisplayMessage): string {
     return message.content.substring(0, message.displayedLength || 0);
   }
@@ -161,7 +164,7 @@ export class ChatComponent implements OnInit {
 
   downloadConversation(): void {
     const dataStr = JSON.stringify(this.conversation, null, 2);
-    const blob = new Blob([dataStr], { type: 'application/json' });
+    const blob = new Blob([dataStr], {type: 'application/json'});
     const url = window.URL.createObjectURL(blob);
 
     const a = document.createElement('a');
@@ -191,7 +194,7 @@ export class ChatComponent implements OnInit {
         conversation: this.conversation
       }, null, 2);
 
-      const blob = new Blob([dataStr], { type: 'application/json' });
+      const blob = new Blob([dataStr], {type: 'application/json'});
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -213,6 +216,7 @@ export class ChatComponent implements OnInit {
         top: this.chatContainer.nativeElement.scrollHeight,
         behavior: 'smooth'
       });
-    } catch {}
+    } catch {
+    }
   }
 }

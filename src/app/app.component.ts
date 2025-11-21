@@ -11,10 +11,8 @@ import {RouterOutlet} from '@angular/router';
 })
 export class AppComponent implements OnInit {
   backgrounds = [
-    'assets/backgrounds/background1.jpg',
-    'assets/backgrounds/background2.jpg',
-    'assets/backgrounds/background3.png',
-    'assets/backgrounds/background4.png',
+    'assets/backgrounds/background1.png',
+    // 'assets/backgrounds/background2.png',
   ];
 
   randomBg = '';
