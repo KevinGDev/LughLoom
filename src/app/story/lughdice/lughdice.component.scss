@@ -1,0 +1,78 @@
+@use "variables" as *;
+
+:host {
+  display: inline-block;
+}
+
+/* container giving strong depth & perspective */
+.dice-3d {
+  width: 200px; /* overridden by [size] input */
+  height: 200px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  perspective: 1400px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  /* deep ambient shadow for depth */
+}
+
+.d20-svg {
+  width: 94%;
+  height: 94%;
+  display: block;
+  z-index: 1;
+  transform-origin: 50% 50%;
+}
+
+/* number styling: bold, high contrast, small stroke for legibility */
+.die-number {
+  fill: $golden;
+  stroke: rgba(249, 246, 238, 0.15);
+  stroke-width: 1.4px;
+  font-weight: 400;
+  text-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
+  transform-origin: 50% 50%;
+}
+
+/* runes style (celtiques) */
+/* parent : garde l'opacité/animation */
+.runes {
+  pointer-events: none;
+  color: $ivory-bone;
+  font-family: 'Cinzel', serif;
+}
+
+
+@keyframes pseudo3d-roll {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(2);
+  }
+  100% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(720deg) translateX(5px) translateY(0) scale(1);
+  }
+}
+
+/* apply with dynamic duration variable */
+.dice-3d.pseudo-3d-roll {
+  animation: pseudo3d-roll 0.3s linear;
+}
+
+/* number micro-transform during roll */
+.dice-3d.pseudo-3d-roll .die-number {
+  transition: transform 0.3s;
+}
+
+/* micro-press on click */
+.dice-3d:active {
+  transform: translateY(2px);
+}
+
+/* responsive: scale to parent if host style sets width/height */
+:host([style*="width"]) .dice-3d,
+.dice-3d[style] {
+  width: 100%;
+  height: 100%;
+}

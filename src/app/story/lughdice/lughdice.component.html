@@ -1,0 +1,60 @@
+<div
+  #container
+  class="dice-3d"
+  role="img"
+  [attr.aria-label]="'Dé 20 faces: ' + (value ?? 20)"
+>
+  <svg viewBox="0 0 260 260" class="d20-svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="facet" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#080705"/>
+        <stop offset="45%" stop-color="#3b2616"/>
+        <stop offset="100%" stop-color="#080705"/>
+      </linearGradient>
+
+      <linearGradient id="numGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#f6e3a0"/>
+        <stop offset="100%" stop-color="#c89f3a"/>
+      </linearGradient>
+
+      <path id="runePath" d="M130,56 a66,66 0 1,1 -0.1,0" fill="none"/>
+    </defs>
+
+    <g class="body">
+      <path
+        d="M130 16 L210 52 L236 130 L204 210 L130 246 L56 210 L24 130 L50 52 Z"
+        class="outer"
+        fill="url(#facet)"
+        stroke="rgba(0,0,0,0.75)"
+        stroke-width="3"
+      />
+      <polygon points="130,30 172,56 154,112 130,132 106,112 88,56" fill="rgba(255,255,255,0.035)"/>
+      <path d="M130 16 L210 52 L196 74 L130 46 Z" fill="rgba(255,255,255,0.06)" opacity="0.9"/>
+    </g>
+
+    <!-- Celtic runes -->
+    <g class="runes" aria-hidden="true">
+      <text class="rune-line" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="currentColor">
+        <textPath href="#runePath" startOffset="50%">
+          ᚛ ᚂ ᚇ ᚋ ᚄ ᚆ ᚈ ᚑ ᚉ ᚃ ᚅ ᚔ
+        </textPath>
+      </text>
+    </g>
+
+    <text
+      #valueText
+      id="die-value"
+      x="50%"
+      y="54%"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-family="'Cinzel', serif"
+      font-weight="800"
+      font-size="56"
+      class="die-number"
+      fill="url(#numGrad)"
+    >
+      20
+    </text>
+  </svg>
+</div>
