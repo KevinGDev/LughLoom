@@ -6,7 +6,7 @@
   align-items: center;
   text-align: center;
   color: $golden;
-  animation: fadeIn 5s;
+  animation: fadeIn 4s ease-in-out;
 
   form {
     height: 60vh;
@@ -34,47 +34,93 @@
 
       .background-cards-container {
         display: flex;
-        height: 100%;
+        height: 60vh;
         flex-direction: row;
         justify-content: space-around;
         overflow: scroll;
-        overflow-y: hidden;
+        overflow-y: visible;
         scrollbar-width: thin;
         margin: 0 5vw;
-
+        width: 100%;
+        -webkit-overflow-scrolling: touch;
 
         .background-card {
-          color: $ivory-bone;
-          flex: 0 0 20vw;
+          flex: 0 0 auto;
+          min-width: 300px;
+          max-width: 250px;
           font-weight: bold;
-          background-image: url("/src/assets/card-background.png");
-          background-size: cover;
-          background-repeat: no-repeat;
-          box-shadow: inset 9px -6px 50px 23px #000000;
           margin: 5vh 2vw;
-          border-radius: 30px;
-          opacity: 0.8;
-          padding: 2vh 1vw;
-          transform: scale(1);
-          transition-duration: 0.3s;
+          border-radius: 5px;
+          perspective: 1000px; // permet le 3D flip
+          cursor: pointer;
+
+          .background-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+            transform-origin: center center;
+          }
+
+          &:hover .background-card-inner {
+            transform: rotateY(180deg);
+          }
+
+          .background-card-front,
+          .background-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            background-color: rgba(0, 0, 0, 0.25);
+
+
+          }
+
+          .background-card-back {
+            transform: rotateY(180deg);
+            background-color: rgba(0, 0, 0, 0.6); // un peu plus foncé pour différencier
+          }
+
+          .background-card-front {
+            .background-card-header {
+              font-size: $medium-font-size;
+              margin-bottom: 2vh;
+              color: $ivory-bone;
+            }
+
+            .background-icon img {
+              max-width: 150px;
+              max-height: 150px;
+              @media (max-width: 799px) {
+                max-width: 100px;
+                max-height: 100px;
+              }
+            }
+          }
+
+          .background-card-back {
+            .background-card-body {
+              padding: 0 2vw;
+              font-size: $x-small-font-size;
+              color: $ivory-bone;
+            }
+          }
+
           @media (max-width: 799px) {
-            flex: 0 0 60vw;
+            min-width: 60vw;
             padding: 2vh 5vw;
           }
 
-          &:hover {
-            transform: scale(1.1);
-            transition-duration: 0.8s;
-          }
-
-          .background-card-header {
-            font-size: $medium-font-size;
-            margin-bottom: 10vh;
-          }
-
-          .background-card-body {
-            font-size: $x-small-font-size;
-          }
 
           .background-icon {
             margin-top: 10vh;
@@ -115,9 +161,38 @@
       }
     }
   }
-
-
 }
+
+.omen-container {
+  display: flex;
+  flex-direction: column;
+  font-size: $large-font-size;
+}
+
+.omen-placeholder {
+  color: $golden;
+  opacity: 0;
+  animation: fadeInOut 30s ease-in-out forwards;
+  text-align: justify;
+  margin: 5vh 2vw;
+}
+
+.dice-omen-container {
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  &.fade-out{
+    animation: fadeOut 5s ease-in-out forwards;
+  }
+}
+
+
+.omen-content {
+  margin: 0 2vw;
+  font-size: $x-large-font-size;
+  animation: fadeInOut 10s ease-in-out forwards;
+}
+
 
 @keyframes fadeIn {
   0% {
@@ -127,3 +202,27 @@
     opacity: 0.90;
   }
 }
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
