@@ -10,7 +10,8 @@ export class AudioService {
     'assets/musics/track2.mp3',
     'assets/musics/track3.mp3',
     'assets/musics/track4.mp3',
-    'assets/musics/track5.mp3'
+    'assets/musics/track5.mp3',
+    'assets/musics/track6.mp3'
   ];
   private randomIndex = Math.floor(Math.random() * this.audioFiles.length);
 

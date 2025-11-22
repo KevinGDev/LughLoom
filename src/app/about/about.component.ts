@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, ElementRef, inject, ViewChild} from '@angular/core';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {NgOptimizedImage} from '@angular/common';
-import {Router} from '@angular/router';
+import {NavigationService} from '../../services/navigation-service';
 
 @Component({
   selector: 'app-about',
@@ -18,7 +18,7 @@ export class AboutComponent implements AfterViewInit {
   translate: TranslateService = inject(TranslateService);
 
 
-  constructor(private router: Router) {
+  constructor(private navigationService: NavigationService) {
   }
 
   ngAfterViewInit() {
@@ -36,10 +36,10 @@ export class AboutComponent implements AfterViewInit {
       } else {
         clearInterval(interval);
       }
-    }, 10);
+    }, 20);
   }
 
   protected backToHome() {
-    this.router.navigate(['']).then()
+    this.navigationService.back();
   }
 }

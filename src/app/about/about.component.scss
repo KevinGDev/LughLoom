@@ -1,7 +1,6 @@
 @use "../../styles/variables" as *;
 
 .about-text {
-  color: $golden;
   font-weight: bold;
   font-size: $small-font-size;
   letter-spacing: 3px;
@@ -9,14 +8,5 @@
   text-align: justify;
   line-height: 30px;
   white-space: break-spaces;
-
 }
 
-@keyframes blink-caret {
-  from, to {
-    border-color: transparent;
-  }
-  50% {
-    border-color: $golden;
-  }
-}

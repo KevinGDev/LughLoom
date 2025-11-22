@@ -8,24 +8,51 @@
           <input type="text" id="dynamic-input" [(ngModel)]="currentAttributeValue"
                  [ngModelOptions]="{standalone: true}"
                  [placeholder]="'enterAttribute' | translate : { attribute: currentAttribute  | translate}">
-
         } @else if (currentAttribute === "background") {
-
           <div class="background-cards-container">
             @for (background of backgrounds; track background.key) {
               <div (keydown)="selectBackground(background)" (click)="selectBackground(background)"
                    class="background-card">
-                <div class="background-card-header">
-                  {{ background.labelKey | translate }}
-                </div>
-                <div class="background-card-body">
-                  {{ background.descriptionKey | translate }}
-                </div>
-                <div class="background-icon">
-                  <img src="{{background.icon}}" alt="{{'icon-alt' | translate}}">
+                <div class="background-card-inner">
+                  <div class="background-card-front">
+                    <div class="card-content">
+                      <div class="background-card-header">
+                        {{ background.labelKey | translate }}
+                      </div>
+                      <div class="background-icon">
+                        <img src="{{background.icon}}" alt="{{'icon-alt' | translate}}">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="background-card-back">
+                    <div class="card-content">
+                      <div class="background-card-body">
+                        {{ background.descriptionKey | translate }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             }
+          </div>
+        } @else if (currentAttribute === "omen") {
+          <div class="omen-container">
+            <div class="dice-omen-container" [class.fade-out]="fadeDice">
+              <lughdice (click)="triggerDiceRoll()" #d20 [size]="250" [disabled]="isDiceDisabled"></lughdice>
+            </div>
+            <div class="omen-text-wrapper">
+              @if (isOmenPending) {
+                <div class="omen-placeholder"> {{ 'pendingOmen'|translate }}</div>
+              } @else {
+                <div id="omen-content" class="omen-content markdown-container">
+                  @for (message of conversation$| async; track message) {
+                    <div class="{{message.role}}">
+                      <markdown [data]="message.content"></markdown>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
           </div>
         }
       </div>

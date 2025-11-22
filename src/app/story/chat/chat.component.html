@@ -1,7 +1,7 @@
 <div class="chat-screen">
   <h1>{{ "gameMaster" | translate }}</h1>
   <div class="chat-main">
-    @if (conversation.length === 0) {
+    @if (this.isStarting) {
       <div class="chat-content">
         {{ "chatTextboxPlaceHolder" | translate }}
       </div>
@@ -26,8 +26,8 @@
 
 
   <div class="chat-textbox">
-    @if(dice){
-      <lughdice  (click)="d20.rollWithPseudo3DRotation()" #d20 [size]="150"></lughdice>
+    @if (dice) {
+        <lughdice (click)="triggerDiceRoll()" #d20 [size]="150"></lughdice>
     }
     @if (choices.length > 0) {
       <div class="choices-container">

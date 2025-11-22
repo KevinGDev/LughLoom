@@ -13,8 +13,8 @@
     "windows": [
       {
         "title": "Lughloom",
-        "width": 800,
-        "height": 600,
+        "width": 1080,
+        "height": 1920,
         "resizable": true,
         "fullscreen": false
       }

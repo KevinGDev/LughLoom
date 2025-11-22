@@ -11,10 +11,8 @@ import {Language} from '../../../utils/LanguagesEnum';
 import {ChatMessage} from '../../../interfaces/chatMessageInterface';
 import {ErrorMessages} from '../../../utils/ErrorMessages';
 import {LughDiceComponent} from '../lughdice/lughdice.component';
+import {DisplayMessage} from '../../../interfaces/displayMessage';
 
-interface DisplayMessage extends ChatMessage {
-  displayedLength?: number;
-}
 
 @Component({
   selector: 'app-chat',
@@ -24,6 +22,7 @@ interface DisplayMessage extends ChatMessage {
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
+  protected isStarting: boolean = true;
 
   constructor(
     private readonly ollamaService: OllamaService,
@@ -34,6 +33,8 @@ export class ChatComponent implements OnInit {
 
   @Input() character: SimpleCharacterInterface | null = null;
   @ViewChild("chatContainer") private chatContainer!: ElementRef;
+  @ViewChild('d20') private d20!: LughDiceComponent;
+
 
   choices: string[] = [];
   rules: string = "";
@@ -43,13 +44,14 @@ export class ChatComponent implements OnInit {
   conversation: DisplayMessage[] = [];
   downloading: boolean = false;
   language: string = '';
-  dice: boolean = true;
+  dice: boolean = false;
 
   async ngOnInit(): Promise<void> {
     this.isLoading = true;
     this.language = this.translateService.currentLang || this.translateService.defaultLang;
     await this.startStory();
   }
+
 
   async startStory(): Promise<void> {
     this.isTyping = true;
@@ -65,7 +67,7 @@ export class ChatComponent implements OnInit {
       await this.ollamaService.generateChatStream(this.rules, (chunk: ChatMessage) => {
         const lastIndex = this.conversation.length - 1;
         const lastMessage = this.conversation[lastIndex];
-
+        this.isStarting = false;
         // Mettre à jour displayedLength AVANT d'ajouter le nouveau contenu
         lastMessage.displayedLength = lastMessage.content.length;
         lastMessage.content += chunk.content;
@@ -76,13 +78,7 @@ export class ChatComponent implements OnInit {
     } catch (error) {
       console.error(error);
     } finally {
-      this.isTyping = false;
-      this.isLoading = false;
-
-      const lastMessage = this.conversation[this.conversation.length - 1];
-      if (lastMessage && lastMessage.role !== RoleEnum.user) {
-        this.extractStoryAndChoices(lastMessage.content);
-      }
+      this.manageEndOfConversation()
     }
   }
 
@@ -120,33 +116,30 @@ export class ChatComponent implements OnInit {
       await this.ollamaService.generateChatStream(userInput, (chunk: ChatMessage) => {
         const lastIndex = this.conversation.length - 1;
         const lastMessage = this.conversation[lastIndex];
-
         lastMessage.displayedLength = lastMessage.content.length;
         lastMessage.content += chunk.content;
-
         this.cdr.detectChanges();
         this.scrollToBottom();
       });
     } catch (error) {
       console.error(ErrorMessages.streamingError, error);
     } finally {
-      this.isTyping = false;
-      this.isLoading = false;
-
-      const lastMessage = this.conversation[this.conversation.length - 1];
-      if (lastMessage && lastMessage.role !== RoleEnum.user) {
-        this.extractStoryAndChoices(lastMessage.content);
-      }
+      this.manageEndOfConversation();
     }
   }
 
 
-  getDisplayedContent(message: DisplayMessage): string {
-    return message.content.substring(0, message.displayedLength || 0);
-  }
-
-  getNewContent(message: DisplayMessage): string {
-    return message.content.substring(message.displayedLength || 0);
+  private manageEndOfConversation() {
+    this.isTyping = false;
+    this.isLoading = false;
+    const lastMessage = this.conversation[this.conversation.length - 1];
+    if (lastMessage && lastMessage.role !== RoleEnum.user) {
+      if (this.detectDiceRollRequest(lastMessage.content)) {
+        this.dice = true;
+        lastMessage.content = lastMessage.content.replace(/<roll required:\s*1d20>/i, 'Lancez les dés pour démarrer').trim();
+      }
+      this.extractStoryAndChoices(lastMessage.content);
+    }
   }
 
   private extractStoryAndChoices(text: string) {
@@ -160,19 +153,6 @@ export class ChatComponent implements OnInit {
   clickChoice(choice: string): void {
     this.answer = choice;
     this.sendAnswer().then();
-  }
-
-  downloadConversation(): void {
-    const dataStr = JSON.stringify(this.conversation, null, 2);
-    const blob = new Blob([dataStr], {type: 'application/json'});
-    const url = window.URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'conversation.json';
-    a.click();
-
-    window.URL.revokeObjectURL(url);
   }
 
   async summarizeAndDownload(): Promise<void> {
@@ -219,4 +199,36 @@ export class ChatComponent implements OnInit {
     } catch {
     }
   }
+
+  private detectDiceRollRequest(text: string): boolean {
+    const rollPattern = /<roll required:\s*1d20>/i;
+    return rollPattern.test(text);
+  }
+
+  public triggerDiceRoll(): void {
+    if (this.d20 && this.dice) {
+      this.d20.rollWithPseudo3DRotation().then((result) => {
+
+        // 🆕 1) Ajouter un message visible dans la conversation
+        const rollMessage: DisplayMessage = {
+          role: RoleEnum.user,
+          content: `🎲 **${this.translateService.instant('diceRoll') || 'Dice roll'}: ${result}**`
+        };
+        this.conversation.push(rollMessage);
+        this.cdr.detectChanges();
+        this.scrollToBottom();
+
+        // 🆕 2) Utiliser le résultat comme réponse pour Ollama
+        this.answer = result.toString();
+        this.sendAnswer().then();
+
+        // Garder l'état propre
+        setTimeout(() => {
+          this.dice = false;
+        }, 1000);
+      });
+    }
+  }
+
 }
+

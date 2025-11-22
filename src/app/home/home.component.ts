@@ -1,21 +1,20 @@
 import {Component} from '@angular/core';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {RouterLink} from '@angular/router';
 import {StoryComponent} from '../story/story.component';
 import {SettingsComponent} from '../settings/settings.component';
 import {AudioService} from '../../services/audio.service';
+import {AboutComponent} from '../about/about.component';
+import {NavigationService} from '../../services/navigation-service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [TranslatePipe, StoryComponent, SettingsComponent, RouterLink],
+  imports: [TranslatePipe, StoryComponent, SettingsComponent, AboutComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  protected selectedContent: string = 'home';
-
-  constructor(private translate: TranslateService, private audioService: AudioService) {
+  constructor(private translate: TranslateService, private audioService: AudioService, public navigationService: NavigationService) {
   }
 
 
@@ -23,10 +22,20 @@ export class HomeComponent {
     this.translate.use(lang);
   }
 
-  startAdventure() {
-    this.selectedContent = 'story';
-    document.body.classList.add('scrolled');
-    this.audioService.playSfx('/assets/sfx/bell.mp3');
-  }
+  scrolled = false;
+  locked = false;
 
+  navigate(page: string) {
+    this.navigationService.navigate(page);
+
+    if (page === 'story' && !this.locked) {
+      this.scrolled = true;
+      this.audioService.playSfx('/assets/sfx/bell.mp3');
+
+      setTimeout(() => {
+        this.locked = true;
+      }, 1000); // correspond à la transition CSS
+    }
+
+  }
 }

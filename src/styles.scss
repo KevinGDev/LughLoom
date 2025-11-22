@@ -2,37 +2,25 @@
 @use "variables" as *;
 
 body {
-  font-family: $garamond;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-color: $dark-green;
-  background-position: top;
-  transition: background-position 8s ease-in-out; /* Ajoutez la transition ici */
-
-  @media (max-width: 799px) {
-    background-size: 400%; // ou toute autre valeur que vous préférez
-  }
+  //font-family: $garamond;
+  //background-size: cover;
+  //background-repeat: no-repeat;
+  //background-color: $dark-green;
+  //background-position: top;  margin: 0;
+  //padding: 0;
+  //overflow: auto;
+  //transition: background-position 1s ease-in-out; /* Ajoutez la transition ici */
+  //
+  //@media (max-width: 799px) {
+  //  background-size: 400%; // ou toute autre valeur que vous préférez
+  //}
 }
 
-body.scrolled {
-  @media (max-width: 799px) {
-    background-position: 15% 65%;
-  }
-  @media (min-width: 800px) and (max-width: 999px) {
-    background-position: 15% 50%;
-  }
-  @media (min-width: 1000px) and (max-width: 1999px) {
-    background-position: 0 60%;
-  }
-  @media (min-width: 1200px) {
-    background-position: 0 75%;
-  }
-}
 
 /* Scrollbar globale - WebKit (Chrome, Safari, Edge) */
 *::-webkit-scrollbar {
-  width: 6px;         /* scroll verticale */
-  height: 6px;        /* scroll horizontale */
+  width: 6px; /* scroll verticale */
+  height: 6px; /* scroll horizontale */
 }
 
 *::-webkit-scrollbar-track {
@@ -46,7 +34,7 @@ body.scrolled {
 
 /* Scrollbar globale - Firefox */
 * {
-  scrollbar-width: thin;               /* mince */
+  scrollbar-width: thin; /* mince */
   scrollbar-color: $golden transparent; /* curseur jaune, fond transparent */
 }
 
@@ -65,7 +53,18 @@ body.scrolled {
 }
 
 
-.back-button{
-  margin-top: 3vh;
-  margin-left: 5vw;
+.back-button {
+  position: absolute;
+  left: 5%;
+  top: 5%;
+  opacity: 0;
+  cursor: pointer;
+  animation: fadeSlide 600ms ease forwards;
+}
+
+@keyframes fadeSlide {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

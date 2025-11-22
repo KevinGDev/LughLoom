@@ -13,14 +13,12 @@
   }
 
   .chat-main {
-    border: 1px solid $golden;
     opacity: 0.90;
     width: 80vw;
     height: 50vh;
-    background-color: black;
-    border-radius: 15px;
+    border-radius: 5px 5px 5px 10px;
     margin: auto;
-    box-shadow: 10px 10px 85px 20px rgba(0, 0, 0, 0.81);
+    box-shadow: 10px 10px 85px 20px $dark-green;
     white-space: pre-line;
     overflow: auto;
     scrollbar-width: none;
@@ -29,8 +27,11 @@
       color: $golden;
       font-size: $small-font-size;
       margin: 1vh 1vw;
+      padding: 2vh 1vw;
       overflow-y: auto;
       height: 95%;
+      text-align: justify;
+      line-height: 2vh;
 
       .user {
         text-align: right;
@@ -41,13 +42,12 @@
   }
 
   .chat-textbox {
-    border: 1px solid $golden;
-    border-radius: 15px;
+    border-radius: 5px 5px 5px 10px;
     position: relative;
     top: 80%;
     width: 80vw;
     height: 15vh;
-    background-color: black;
+    box-shadow: 10px 10px 85px 20px $dark-green;
     display: flex;
     justify-content: space-around;
     margin: 2vh auto;
@@ -56,8 +56,6 @@
 
 
     textarea {
-      padding-left: 10px;
-      padding-top: 40px;
       background-color: transparent;
       border: none;
       outline: none;
@@ -70,8 +68,10 @@
       overflow: auto;
       scrollbar-width: none;
       resize: none;
+      padding: 5vh 2vw;
 
       &::placeholder {
+
         color: $golden;
         font-style: italic;
         font-size: $small-font-size;
@@ -79,8 +79,9 @@
     }
 
     button {
+      all: unset;
       background-color: transparent;
-      border: none;
+      margin-right: 3vw;
 
       img {
         height: 5vh;
@@ -214,9 +215,12 @@
   cursor: pointer;
   text-align: start;
   width: 100%;
+  transition: 0.2s;
+
 }
 
 .choice-button:hover {
   color: $ivory-bone;
   transform: scale(1.05);
+  transition: 0.2s;
 }

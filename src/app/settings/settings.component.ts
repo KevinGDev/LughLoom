@@ -3,9 +3,9 @@ import {AppConfigService} from '../../services/app-config.service';
 import {FormsModule} from '@angular/forms';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {NgOptimizedImage} from '@angular/common';
-import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {VolumeComponent} from '../volume/volume.component';
+import {NavigationService} from '../../services/navigation-service';
 
 @Component({
   selector: 'app-settings',
@@ -25,12 +25,13 @@ export class SettingsComponent {
 
   constructor(
     private configService: AppConfigService,
-    private router: Router,
+    private nav: NavigationService,
     private snackBar: MatSnackBar,
     private translateService: TranslateService,
   ) {
     this.config = this.configService.getConfig();
   }
+
 
   save() {
     this.configService.updateConfig(this.config);
@@ -45,6 +46,6 @@ export class SettingsComponent {
   }
 
   protected backToHome() {
-    this.router.navigate(['']).then()
+    this.nav.back();
   }
 }

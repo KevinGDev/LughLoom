@@ -1,38 +1,51 @@
+<div class="background-wrapper">
+  <img
+    class="background-img"
+    [class.scrolled]="scrolled"
+    [class.locked]="locked"
+    src="./assets/backgrounds/background1.png"
+    alt="background"
+  />
+</div>
 <main class="main">
   <div class="head">
     <h1 class="title"> LùghLoom </h1>
-
-    <nav class="navigation">
-      <ul>
-        <li class="nav-item">
-          <a routerLink="/about">{{ 'about' | translate }}</a>
-          </li>
-        <li class="nav-item">
-          <a routerLink="/settings">{{ 'settings' | translate }}</a>
-        </li>
-      </ul>
-    </nav>
   </div>
-  @if (selectedContent === 'home') {
-    <div class="middle">
-      <p>{{ 'joinQuestText' | translate }}</p>
-      <button class="button" (click)="startAdventure()">
-        {{ 'startAdventureButton'|translate }}
-      </button>
 
-      <div class="language-selector">
-        <button (click)="translateText('fr')">
-          <img class="language-flag" src="../../assets/fr-flag.png" alt="french flag">
-        </button>
-        <button (click)="translateText('en')">
-          <img class="language-flag" src="../../assets/uk-flag.png" alt="united kingdom flag">
-        </button>
-      </div>
-    </div>
-  } @else if (selectedContent === 'story') {
-    <app-story></app-story>
-  } @else if (selectedContent === 'settings') {
-    <app-settings></app-settings>
-  }
+  <div>
+    <nav class="navigation">
+      <button class="nav-item" (click)="navigate('about')"> {{ 'about' | translate }}</button>
+      <button class="nav-item" (click)="navigate('settings')">{{ 'settings' | translate }}</button>
+    </nav>
+
+    @switch (navigationService.current()) {
+      @case ('home') {
+        <div class="middle">
+          <p>{{ 'joinQuestText' | translate }}</p>
+          <button class="button" (click)="navigate('story')">
+            {{ 'startAdventureButton'|translate }}
+          </button>
+
+          <div class="language-selector">
+            <button (click)="translateText('fr')">
+              <img class="language-flag" src="../../assets/fr-flag.png" alt="french flag">
+            </button>
+            <button (click)="translateText('en')">
+              <img class="language-flag" src="../../assets/uk-flag.png" alt="united kingdom flag">
+            </button>
+          </div>
+        </div>
+      }
+      @case ('story') {
+        <app-story></app-story>
+      }
+      @case ('settings') {
+        <app-settings></app-settings>
+      }
+      @case ('about') {
+        <app-about></app-about>
+      }
+    }
+
+  </div>
 </main>
-
