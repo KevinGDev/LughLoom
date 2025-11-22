@@ -78,7 +78,7 @@
       }
     }
 
-    button {
+    .answer-button {
       all: unset;
       background-color: transparent;
       margin-right: 3vw;
@@ -217,10 +217,11 @@
   width: 100%;
   transition: 0.2s;
 
+  &:hover {
+    color: $ivory-bone;
+    transform: scale(1.05);
+    transition: 0.2s;
+  }
 }
 
-.choice-button:hover {
-  color: $ivory-bone;
-  transform: scale(1.05);
-  transition: 0.2s;
-}
+

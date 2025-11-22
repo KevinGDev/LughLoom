@@ -23,11 +23,9 @@
       </div>
     }
   </div>
-
-
   <div class="chat-textbox">
     @if (dice) {
-        <lughdice (click)="triggerDiceRoll()" #d20 [size]="150"></lughdice>
+      <lughdice (click)="triggerDiceRoll()" #d20 [size]="150"></lughdice>
     }
     @if (choices.length > 0) {
       <div class="choices-container">
@@ -38,15 +36,20 @@
         }
       </div>
     }
-    <textarea placeholder="{{'textAreaPlaceHolder'| translate }}"
-              [(ngModel)]="answer" (keydown)="handleKeyDown($event)"
-              [disabled]="isLoading" [ngClass]="isLoading?'disabled':'enabled'">
+    @if (textArea) {
+      <textarea placeholder="{{'textAreaPlaceHolder'| translate }}"
+                [(ngModel)]="answer" (keydown)="handleKeyDown($event)"
+                [disabled]="isLoading" [ngClass]="isLoading?'disabled':'enabled'">
 
 
     </textarea>
-    <button (click)="sendAnswer()" [disabled]="isLoading" [ngClass]="isLoading?'disabled':'enabled'">
-      <img src="../../../assets/send-icon.png" alt="Send message">
-    </button>
+      <button (click)="sendAnswer()" [disabled]="isLoading" [ngClass]="isLoading?'disabled':'enabled'"
+              class="answer-button">
+        <img src="../../../assets/send-icon.png" alt="Send message">
+      </button>
+    }
+
+
   </div>
 
 

@@ -23,6 +23,7 @@ import {DisplayMessage} from '../../../interfaces/displayMessage';
 })
 export class ChatComponent implements OnInit {
   protected isStarting: boolean = true;
+  protected textArea: boolean = true;
 
   constructor(
     private readonly ollamaService: OllamaService,
@@ -45,6 +46,7 @@ export class ChatComponent implements OnInit {
   downloading: boolean = false;
   language: string = '';
   dice: boolean = false;
+
 
   async ngOnInit(): Promise<void> {
     this.isLoading = true;
@@ -136,7 +138,8 @@ export class ChatComponent implements OnInit {
     if (lastMessage && lastMessage.role !== RoleEnum.user) {
       if (this.detectDiceRollRequest(lastMessage.content)) {
         this.dice = true;
-        lastMessage.content = lastMessage.content.replace(/<roll required:\s*1d20>/i, 'Lancez les dés pour démarrer').trim();
+        this.textArea = false;
+        lastMessage.content = lastMessage.content.replace(/<roll required:\s*1d20>/i, this.translateService.instant('throwDice')).trim();
       }
       this.extractStoryAndChoices(lastMessage.content);
     }
@@ -144,10 +147,11 @@ export class ChatComponent implements OnInit {
 
   private extractStoryAndChoices(text: string) {
     text = text.replace(/\r/g, '').trim();
-    const choiceMatches = text.match(/(\d+\s*-[^\n]+)/g);
+    const choiceMatches = text.match(/(?:^|\n)\s*(\d+\.?|\d+\)|\d+\s*[-–—])\s+(.+)/g);
     this.choices = choiceMatches
-      ? choiceMatches.map(c => c.replace(/^\d+\s*-\s*/, '').trim())
+      ? choiceMatches.map(c => c.replace(/^\s*(\d+\.?|\d+\)|\d+\s*[-–—])\s*/, '').trim())
       : [];
+
   }
 
   clickChoice(choice: string): void {
@@ -203,6 +207,7 @@ export class ChatComponent implements OnInit {
   private detectDiceRollRequest(text: string): boolean {
     const rollPattern = /<roll required:\s*1d20>/i;
     return rollPattern.test(text);
+
   }
 
   public triggerDiceRoll(): void {
@@ -228,6 +233,7 @@ export class ChatComponent implements OnInit {
         }, 1000);
       });
     }
+    this.textArea = true;
   }
 
 }

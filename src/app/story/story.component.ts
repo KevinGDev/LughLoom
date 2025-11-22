@@ -94,7 +94,7 @@ export class StoryComponent {
       this.omenReadyToDisplay = false;
 
       // Lancer le countdown 20s
-      const MIN_DELAY = 30000;
+      const MIN_DELAY = 100;
       const delayPromise = new Promise(resolve => {
         this.omenPendingTimeout = setTimeout(() => {
           this.omenReadyToDisplay = true;
@@ -135,7 +135,7 @@ export class StoryComponent {
           // Switch to next step after some time
           setTimeout(() => {
             this.nextAttribute();
-          }, 10000);
+          }, 100);
         });
       });
     }
