@@ -121,7 +121,7 @@
   height: 100%;
   object-fit: cover; /* Contient ou cover selon le rendu désiré */
   object-position: top;
-  transition: object-position 1s ease-in-out;
+  transition: object-position 3s ease-in-out;
 
   &.scrolled {
     object-position: center bottom;

@@ -85,7 +85,7 @@ export class StoryComponent {
   }
 
   triggerDiceRoll(): void {
-    if(!this.isDiceDisabled) {
+    if (!this.isDiceDisabled) {
       const language = this.translateService.currentLang || this.translateService.defaultLang;
       this.isOmenPending = true;
 

@@ -34,7 +34,7 @@ export class HomeComponent {
 
       setTimeout(() => {
         this.locked = true;
-      }, 1000); // correspond à la transition CSS
+      }, 3000); // correspond à la transition CSS
     }
 
   }

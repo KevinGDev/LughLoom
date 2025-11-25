@@ -32,10 +32,15 @@
       height: 95%;
       text-align: justify;
       line-height: 2vh;
+      overflow-y: auto;
+      max-height: 500px; /* ou la hauteur que tu veux */
+      scroll-behavior: smooth; /* scroll fluide classique */
+      transition: scroll-top 10s linear; /* transition lente */
+
 
       .user {
-        text-align: right;
-        margin: 2vh 0 2vh 50vw;
+        text-align: center;
+        margin: 2vh 0 2vh 0;
         color: white;
       }
     }
@@ -224,4 +229,19 @@
   }
 }
 
+.dice-container {
+  opacity: 1;
 
+  &.fade-out {
+    animation: fadeOut 3s ease-in-out forwards;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

@@ -6,24 +6,25 @@ import {OllamaService} from '../../../services/ollama-api.service';
 import {Prompts} from '../../../utils/Prompts';
 import {RoleEnum} from '../../../utils/RoleEnum';
 import {SimpleCharacterInterface} from '../../../interfaces/simpleCharacterInterface';
-import {MarkdownComponent} from 'ngx-markdown';
 import {Language} from '../../../utils/LanguagesEnum';
 import {ChatMessage} from '../../../interfaces/chatMessageInterface';
 import {ErrorMessages} from '../../../utils/ErrorMessages';
 import {LughDiceComponent} from '../lughdice/lughdice.component';
 import {DisplayMessage} from '../../../interfaces/displayMessage';
+import {MarkdownComponent} from 'ngx-markdown';
 
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [TranslatePipe, FormsModule, NgClass, MarkdownComponent, LughDiceComponent],
+  imports: [TranslatePipe, FormsModule, NgClass, LughDiceComponent, MarkdownComponent],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
   protected isStarting: boolean = true;
   protected textArea: boolean = true;
+  protected fadeDice: boolean = false;
 
   constructor(
     private readonly ollamaService: OllamaService,
@@ -75,7 +76,7 @@ export class ChatComponent implements OnInit {
         lastMessage.content += chunk.content;
 
         this.cdr.detectChanges();
-        this.scrollToBottom();
+        this.scrollToBottomSlowly();
       });
     } catch (error) {
       console.error(error);
@@ -121,7 +122,7 @@ export class ChatComponent implements OnInit {
         lastMessage.displayedLength = lastMessage.content.length;
         lastMessage.content += chunk.content;
         this.cdr.detectChanges();
-        this.scrollToBottom();
+        this.scrollToBottomSlowly();
       });
     } catch (error) {
       console.error(ErrorMessages.streamingError, error);
@@ -194,20 +195,35 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  private scrollToBottom(): void {
-    try {
-      this.chatContainer.nativeElement.scroll({
-        top: this.chatContainer.nativeElement.scrollHeight,
-        behavior: 'smooth'
-      });
-    } catch {
-    }
+  private scrollFraction = 0; // propriété de la classe
+
+  private scrollToBottomSlowly() {
+    if (!this.chatContainer) return;
+    const container = this.chatContainer.nativeElement;
+
+    const step = () => {
+      const distance = container.scrollHeight - container.scrollTop - container.clientHeight;
+      if (distance > 0.5) {
+        // accumuler la fraction
+        this.scrollFraction += 0.0015; // vitesse réelle souhaitée
+        const move = Math.floor(this.scrollFraction);
+        if (move > 0) {
+          container.scrollTop += move;
+          this.scrollFraction -= move;
+        }
+        requestAnimationFrame(step);
+      } else {
+        this.scrollFraction = 0; // reset à la fin
+      }
+    };
+
+    requestAnimationFrame(step);
   }
 
   private detectDiceRollRequest(text: string): boolean {
     const rollPattern = /<roll required:\s*1d20>/i;
     return rollPattern.test(text);
-
+    this.fadeDice = false;
   }
 
   public triggerDiceRoll(): void {
@@ -221,19 +237,22 @@ export class ChatComponent implements OnInit {
         };
         this.conversation.push(rollMessage);
         this.cdr.detectChanges();
-        this.scrollToBottom();
+        this.scrollToBottomSlowly();
 
         // 🆕 2) Utiliser le résultat comme réponse pour Ollama
+        this.fadeDice = true;
+
         this.answer = result.toString();
         this.sendAnswer().then();
 
         // Garder l'état propre
         setTimeout(() => {
           this.dice = false;
-        }, 1000);
+          this.textArea = true;
+
+        }, 3000);
       });
     }
-    this.textArea = true;
   }
 
 }

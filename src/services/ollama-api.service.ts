@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
-import { RoleEnum } from '../utils/RoleEnum';
-import { ChatMessage } from '../interfaces/chatMessageInterface';
-import { AppConfigService } from './app-config.service';
-import { invoke } from '@tauri-apps/api/core';
-import { listen, UnlistenFn } from '@tauri-apps/api/event';
+import {Injectable} from '@angular/core';
+import {RoleEnum} from '../utils/RoleEnum';
+import {ChatMessage} from '../interfaces/chatMessageInterface';
+import {AppConfigService} from './app-config.service';
+import {invoke} from '@tauri-apps/api/core';
+import {listen, UnlistenFn} from '@tauri-apps/api/event';
+import {AudioService} from './audio.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class OllamaService {
 
   private readonly messages: ChatMessage[] = [];
 
-  constructor(private config: AppConfigService) {}
+  constructor(private config: AppConfigService, private audioService: AudioService) {
+  }
 
   async generateChatStream(
     userPrompt: string,
@@ -24,13 +26,15 @@ export class OllamaService {
       throw new Error('⚠️ Ollama configuration missing.');
     }
 
-    const userMessage: ChatMessage = { role: RoleEnum.user, content: userPrompt };
+    const userMessage: ChatMessage = {role: RoleEnum.user, content: userPrompt};
     this.messages.push(userMessage);
 
     let fullMessage = '';
     let role: RoleEnum = RoleEnum.assistant;
 
     return new Promise(async (resolve, reject) => {
+      this.audioService.playSfx("/assets/sfx/pencil.mp3")
+
       let unlistenChunk: UnlistenFn | null = null;
       let unlistenDone: UnlistenFn | null = null;
 
@@ -39,10 +43,11 @@ export class OllamaService {
         unlistenChunk = await listen<string>('ollama-chunk', (event) => {
           const parsedText = this.processIncomingChunk(event.payload, (r) => {
             if (r) role = r;
-          });          fullMessage += parsedText;
+          });
+          fullMessage += parsedText;
 
           // Appel UI immédiat
-          onChunk({ role, content: parsedText });
+          onChunk({role, content: parsedText});
         });
 
         unlistenDone = await listen('ollama-done', () => {
@@ -50,10 +55,10 @@ export class OllamaService {
           if (unlistenDone) unlistenDone();
 
           if (fullMessage.trim()) {
-            this.messages.push({ role, content: fullMessage });
+            this.messages.push({role, content: fullMessage});
           }
 
-          resolve({ role, content: fullMessage });
+          resolve({role, content: fullMessage});
         });
 
         await invoke('ollama_chat_stream', {

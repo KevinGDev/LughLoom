@@ -6,21 +6,29 @@
 >
   <svg viewBox="0 0 260 260" class="d20-svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
     <defs>
+      <!-- Gradient for dice faces (glass + mystical colors) -->
       <linearGradient id="facet" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#080705"/>
-        <stop offset="45%" stop-color="#3b2616"/>
-        <stop offset="100%" stop-color="#080705"/>
+        <stop offset="0%" stop-color="rgba(10, 20, 40, 0.5)"/>  <!-- deep blue, semi-transparent -->
+        <stop offset="50%" stop-color="rgba(28, 44, 68, 0.6)"/> <!-- medium blue -->
+        <stop offset="100%" stop-color="rgba(70, 45, 30, 0.5)"/> <!-- bronze hint -->
       </linearGradient>
 
+      <!-- Gradient for numbers -->
       <linearGradient id="numGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#f6e3a0"/>
-        <stop offset="100%" stop-color="#c89f3a"/>
+        <stop offset="0%" stop-color="#F9F6EE"/> <!-- ivory -->
+        <stop offset="100%" stop-color="#D4C3A0"/> <!-- light bronze -->
       </linearGradient>
 
       <path id="runePath" d="M130,56 a66,66 0 1,1 -0.1,0" fill="none"/>
+
+      <!-- Optional blur filter for glass effect -->
+      <filter id="glassBlur" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="6" result="blur"/>
+        <feBlend in="SourceGraphic" in2="blur" mode="normal"/>
+      </filter>
     </defs>
 
-    <g class="body">
+    <g class="body" filter="url(#glassBlur)">
       <path
         d="M130 16 L210 52 L236 130 L204 210 L130 246 L56 210 L24 130 L50 52 Z"
         class="outer"
@@ -28,7 +36,7 @@
         stroke="rgba(0,0,0,0.75)"
         stroke-width="3"
       />
-      <polygon points="130,30 172,56 154,112 130,132 106,112 88,56" fill="rgba(255,255,255,0.035)"/>
+      <polygon points="130,30 172,56 154,112 130,132 106,112 88,56" fill="rgba(255,255,255,0.04)"/>
       <path d="M130 16 L210 52 L196 74 L130 46 Z" fill="rgba(255,255,255,0.06)" opacity="0.9"/>
     </g>
 

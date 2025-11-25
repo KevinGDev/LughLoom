@@ -25,7 +25,9 @@
   </div>
   <div class="chat-textbox">
     @if (dice) {
-      <lughdice (click)="triggerDiceRoll()" #d20 [size]="150"></lughdice>
+      <div class="dice-container" [class.fade-out]="fadeDice">
+        <lughdice (click)="triggerDiceRoll()" #d20 [size]="150"></lughdice>
+      </div>
     }
     @if (choices.length > 0) {
       <div class="choices-container">
